@@ -1,0 +1,17 @@
+import jwt from "jsonwebtoken";
+import ErrorHandler from "../utils/errorHandler.js";
+import catchAsyncErrors from "./catchAsyncErrors.js";
+
+export const isAuthendicatedUser = catchAsyncErrors(async (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token)
+    return next(new ErrorHandler("Access denied. No token provided", 401));
+
+  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
+    if (err) return next(new ErrorHandler("Invalid or expired token", 403));
+    req.user = user;
+    next();
+  });
+});
