@@ -5,7 +5,9 @@ import cors from "cors";
 
 import swaggerUi from "swagger-ui-express";
 
-import authRouter from "./routes/index.routes.js";
+import authRouter from "./routes/auth.routes.js";
+import categoryRouter from "./routes/category.routes.js";
+
 import ErrorHandler from "./utils/errorHandler.js";
 
 import { specs } from "./config/swagger.config.js";
@@ -20,13 +22,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/v1/auth", authRouter);
-app.use(
-  "/api/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(specs, {
-    explorer: true,
-  })
-);
+app.use("/api/v1/category", categoryRouter);
+
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
