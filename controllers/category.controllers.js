@@ -8,7 +8,11 @@ const prisma = new PrismaClient();
 // Get all categories
 
 export const getCategories = catchAsyncErrors(async (req, res, next) => {
-  const categories = await prisma.category.findMany();
+  const categories = await prisma.category.findMany({
+    include: {
+      subCategories: true,
+    },
+  });
 
   res.status(200).send(categories);
 });
@@ -18,6 +22,9 @@ export const getCategory = catchAsyncErrors(async (req, res, next) => {
   const category = await prisma.category.findUnique({
     where: {
       id: parseInt(req.params.id),
+    },
+    include: {
+      subCategories: true,
     },
   });
 
