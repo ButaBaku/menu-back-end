@@ -7,6 +7,7 @@ import swaggerUi from "swagger-ui-express";
 
 import authRouter from "./routes/auth.routes.js";
 import categoryRouter from "./routes/category.routes.js";
+import subcategoryRouter from "./routes/subcategory.routes.js";
 
 import ErrorHandler from "./utils/errorHandler.js";
 
@@ -23,6 +24,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/category", categoryRouter);
+app.use("/api/v1/subcategory", subcategoryRouter);
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
