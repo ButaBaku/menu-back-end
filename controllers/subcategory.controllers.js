@@ -9,6 +9,7 @@ export const getSubcategories = catchAsyncErrors(async (req, res, next) => {
   const subcategories = await prisma.subCategory.findMany({
     include: {
       category: true,
+      products: true,
     },
   });
 
@@ -22,6 +23,7 @@ export const getSubcategory = catchAsyncErrors(async (req, res, next) => {
     },
     include: {
       category: true,
+      products: true,
     },
   });
 
