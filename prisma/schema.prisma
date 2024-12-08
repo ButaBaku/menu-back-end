@@ -20,7 +20,7 @@ model Category {
   titleEN      String
   titleAZ      String
   image     String
-  categories SubCategory[]
+  subCategories SubCategory[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -46,9 +46,10 @@ model Product {
   price     Float
   ingridientsAZ String[]
   ingridientsEN String[]
-  isCombo Boolean
-  subcategory  SubCategory @relation(fields: [subcategoryId], references: [id])
-  subcategoryId Int
+  isCombo Boolean @default(false)
+  image    String
+  subCategory  SubCategory @relation(fields: [subCategoryId], references: [id], onDelete: Cascade)
+  subCategoryId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
