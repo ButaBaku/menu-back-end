@@ -3,30 +3,56 @@ import ErrorHandler from "../utils/errorHandler.js";
 
 import { PrismaClient } from "@prisma/client";
 
+import { categorySchema } from "../lib/validations.js";
+
 const prisma = new PrismaClient();
 
 // Get all categories
 
 export const getCategories = catchAsyncErrors(async (req, res, next) => {
-  const categories = await prisma.category.findMany({
-    include: {
-      subCategories: true,
-    },
-  });
+  const categories = await prisma.category
+    .findMany({
+      include: {
+        subCategories: {
+          select: {
+            id: true,
+            titleEN: true,
+            titleAZ: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      },
+    })
+    .catch((error) => {
+      return next(new ErrorHandler(error.message, 500));
+    });
 
   res.status(200).send(categories);
 });
 
 // Get single category
 export const getCategory = catchAsyncErrors(async (req, res, next) => {
-  const category = await prisma.category.findUnique({
-    where: {
-      id: parseInt(req.params.id),
-    },
-    include: {
-      subCategories: true,
-    },
-  });
+  const category = await prisma.category
+    .findUnique({
+      where: {
+        id: parseInt(req.params.id),
+      },
+      include: {
+        subCategories: {
+          select: {
+            id: true,
+            titleEN: true,
+            titleAZ: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      },
+    })
+    .catch((error) => {
+      return next(new ErrorHandler("Category not found", 404));
+    });
 
   if (!category) {
     return next(new ErrorHandler("Category not found", 404));
@@ -41,7 +67,12 @@ export const createCategory = catchAsyncErrors(async (req, res, next) => {
     const formData = req.body;
     const imagePath = `/${req.file.filename}`;
 
-    console.log(req.body);
+    // Validate user input
+    const { error } = categorySchema.safeParse({
+      titleEN: formData.titleEN,
+      titleAZ: formData.titleAZ,
+    });
+    if (error) return next(new ErrorHandler(error.errors[0].message, 400));
 
     const category = await prisma.category.create({
       data: {
@@ -61,40 +92,52 @@ export const createCategory = catchAsyncErrors(async (req, res, next) => {
 export const updateCategory = catchAsyncErrors(async (req, res, next) => {
   const data = req.body;
 
-  const category = await prisma.category.update({
-    where: {
-      id: parseInt(req.params.id),
-    },
-    data: {
-      titleEN: data.titleEN,
-      titleAZ: data.titleAZ,
-    },
-  });
+  const category = await prisma.category
+    .update({
+      where: {
+        id: parseInt(req.params.id),
+      },
+      data: {
+        titleEN: data.titleEN,
+        titleAZ: data.titleAZ,
+      },
+    })
+    .catch((error) => {
+      return next(new ErrorHandler("Category not found", 404));
+    });
 
   res.status(200).send(category);
 });
 
 // Delete category
 export const deleteCategory = catchAsyncErrors(async (req, res, next) => {
-  await prisma.category.delete({
-    where: {
-      id: parseInt(req.params.id),
-    },
-  });
+  await prisma.category
+    .delete({
+      where: {
+        id: parseInt(req.params.id),
+      },
+    })
+    .catch((error) => {
+      return next(new ErrorHandler("Category not found", 404));
+    });
 
   res.status(204).send({ message: "Category deleted successfully" });
 });
 
 // Update category image
 export const updateCategoryImage = catchAsyncErrors(async (req, res, next) => {
-  const category = await prisma.category.update({
-    where: {
-      id: parseInt(req.params.id),
-    },
-    data: {
-      image: `/${req.file.filename}`,
-    },
-  });
+  const category = await prisma.category
+    .update({
+      where: {
+        id: parseInt(req.params.id),
+      },
+      data: {
+        image: `/${req.file.filename}`,
+      },
+    })
+    .catch((error) => {
+      return next(new ErrorHandler("Category not found", 404));
+    });
 
   res.status(200).send(category);
 });

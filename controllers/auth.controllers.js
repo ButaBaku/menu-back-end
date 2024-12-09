@@ -6,11 +6,17 @@ import jwt from "jsonwebtoken";
 
 import { PrismaClient } from "@prisma/client";
 
+import { userSchema } from "../lib/validations.js";
+
 const prisma = new PrismaClient();
 
 //! Register
 export const registerUser = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
+
+  // Validate user input
+  const { error } = userSchema.safeParse({ email, password });
+  if (error) return next(new ErrorHandler(error.errors[0].message, 400));
 
   const hashedPassword = await bcrypt.hash(password, 8);
 
@@ -34,11 +40,19 @@ export const registerUser = catchAsyncErrors(async (req, res, next) => {
 export const loginUser = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
+  // Validate user input
+  const { error } = userSchema.safeParse({ email, password });
+  if (error) return next(new ErrorHandler(error.errors[0].message, 400));
+
+  const user = await prisma.user
+    .findUnique({
+      where: {
+        email,
+      },
+    })
+    .catch((error) => {
+      return next(new ErrorHandler("Invalid credentials", 401));
+    });
 
   if (!user || !(await bcrypt.compare(password, user.password)))
     return next(new ErrorHandler("Invalid credentials", 401));

@@ -1,14 +1,14 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import authDocs from "../swagger/auth.docs.js";
+import categoryDocs from "../swagger/category.docs.js";
 
 const options = {
   definition: {
     openapi: "3.1.0",
     info: {
-      title: "Admin Dashboard API with Swagger",
+      title: "Admin Dashboard API",
       version: "0.1.0",
-      description:
-        "This is a simple CRUD API application made with Express and documented with Swagger",
+      description: "CRUD API made with Express and documented with Swagger",
     },
 
     components: {
@@ -25,15 +25,15 @@ const options = {
         name: "Auth",
         description: "Authentication routes",
       },
-    ],
-
-    paths: { ...authDocs },
-
-    servers: [
       {
-        url: "http://localhost:3000",
+        name: "Category",
+        description: "Category routes",
       },
     ],
+
+    paths: { ...authDocs, ...categoryDocs },
+
+    servers: [],
   },
 
   apis: ["./routes/*.js"],
