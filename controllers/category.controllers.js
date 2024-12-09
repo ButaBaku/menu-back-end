@@ -118,7 +118,7 @@ export const deleteCategory = catchAsyncErrors(async (req, res, next) => {
       },
     })
     .catch((error) => {
-      return next(new ErrorHandler("Category not found", 404));
+      return next(new ErrorHandler("Category not foundss", 404));
     });
 
   res.status(204).send({ message: "Category deleted successfully" });

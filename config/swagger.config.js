@@ -1,6 +1,8 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import authDocs from "../swagger/auth.docs.js";
 import categoryDocs from "../swagger/category.docs.js";
+import subCategoryDocs from "../swagger/subcategory.docs.js";
+import productDocs from "../swagger/product.docs.js";
 
 const options = {
   definition: {
@@ -29,9 +31,17 @@ const options = {
         name: "Category",
         description: "Category routes",
       },
+      {
+        name: "Subcategory",
+        description: "Subcategory routes",
+      },
+      {
+        name: "Product",
+        description: "Product routes",
+      },
     ],
 
-    paths: { ...authDocs, ...categoryDocs },
+    paths: { ...authDocs, ...categoryDocs, ...subCategoryDocs, ...productDocs },
 
     servers: [],
   },

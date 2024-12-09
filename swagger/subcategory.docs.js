@@ -1,17 +1,17 @@
-const categoryDocs = {
-  "/api/v1/category": {
+const subCategoryDocs = {
+  "/api/v1/subcategory": {
     get: {
-      summary: "Get all categories",
+      summary: "Get all subcategories",
       security: [
         {
           jwtAuth: [],
         },
       ],
-      tags: ["Category"],
-      description: "Get all categories",
+      tags: ["Subcategory"],
+      description: "Get all subcategories",
       responses: {
         200: {
-          description: "All categories",
+          description: "All subcategories",
           content: {
             "application/json": {
               schema: {
@@ -28,8 +28,8 @@ const categoryDocs = {
                     titleAZ: {
                       type: "string",
                     },
-                    image: {
-                      type: "string",
+                    categoryId: {
+                      type: "number",
                     },
                     createdAt: {
                       type: "string",
@@ -37,26 +37,58 @@ const categoryDocs = {
                     updatedAt: {
                       type: "string",
                     },
-                    subCategories: {
+                    category: {
+                      type: "object",
+                      properties: {
+                        id: {
+                          type: "number",
+                        },
+                        titleEN: {
+                          type: "string",
+                        },
+                        titleAZ: {
+                          type: "string",
+                        },
+                        image: {
+                          type: "string",
+                        },
+                        createdAt: {
+                          type: "string",
+                        },
+                        updatedAt: {
+                          type: "string",
+                        },
+                      },
+                    },
+                    products: {
                       type: "array",
                       items: {
                         type: "object",
                         properties: {
-                          id: {
-                            type: "number",
+                          id: { type: "number" },
+                          titleEN: { type: "string" },
+                          titleAZ: { type: "string" },
+                          descEN: { type: "string" },
+                          descAZ: { type: "string" },
+                          gram: { type: "string" },
+                          price: { type: "number" },
+                          ingridientsAZ: {
+                            type: "array",
+                            items: {
+                              type: "string",
+                            },
                           },
-                          titleEN: {
-                            type: "string",
+                          ingridientsEN: {
+                            type: "array",
+                            items: {
+                              type: "string",
+                            },
                           },
-                          titleAZ: {
-                            type: "string",
-                          },
-                          createdAt: {
-                            type: "string",
-                          },
-                          updatedAt: {
-                            type: "string",
-                          },
+                          isCombo: { type: "boolean" },
+                          image: { type: "string" },
+                          subCategoryId: { type: "number" },
+                          createdAt: { type: "string" },
+                          updatedAt: { type: "string" },
                         },
                       },
                     },
@@ -72,32 +104,32 @@ const categoryDocs = {
       },
     },
     post: {
-      summary: "Create new category",
+      summary: "Create new subcategory",
       security: [
         {
           jwtAuth: [],
         },
       ],
-      tags: ["Category"],
-      description: "Create new category",
+      tags: ["Subcategory"],
+      description: "Create new subcategory",
       requestBody: {
         content: {
-          "multipart/form-data": {
+          "application/json": {
             schema: {
               type: "object",
-              required: ["titleEN", "titleAZ", "image"],
+              required: ["titleEN", "titleAZ", "categoryId"],
               properties: {
                 titleEN: {
                   type: "string",
-                  description: "Category title in English",
+                  description: "Subcategory title in English",
                 },
                 titleAZ: {
                   type: "string",
-                  description: "Category title in Azerbaijani",
+                  description: "Subcategory title in Azerbaijani",
                 },
-                image: {
-                  type: "file",
-                  description: "Category image",
+                categoryId: {
+                  type: "number",
+                  description: "Category id",
                 },
               },
             },
@@ -106,7 +138,7 @@ const categoryDocs = {
       },
       responses: {
         201: {
-          description: "New category created",
+          description: "New subcategory created",
           content: {
             "application/json": {
               schema: {
@@ -121,8 +153,8 @@ const categoryDocs = {
                   titleAZ: {
                     type: "string",
                   },
-                  image: {
-                    type: "string",
+                  categoryId: {
+                    type: "number",
                   },
                   createdAt: {
                     type: "string",
@@ -141,16 +173,16 @@ const categoryDocs = {
       },
     },
   },
-  "/api/v1/category/{id}": {
+  "/api/v1/subcategory/{id}": {
     get: {
-      summary: "Get category by id",
+      summary: "Get subcategory by id",
       security: [
         {
           jwtAuth: [],
         },
       ],
-      tags: ["Category"],
-      description: "Get category by id",
+      tags: ["Subcategory"],
+      description: "Get subcategory by id",
       parameters: [
         {
           in: "path",
@@ -163,7 +195,7 @@ const categoryDocs = {
       ],
       responses: {
         200: {
-          description: "Category by id",
+          description: "Subcategory by id",
           content: {
             "application/json": {
               schema: {
@@ -178,8 +210,8 @@ const categoryDocs = {
                   titleAZ: {
                     type: "string",
                   },
-                  titleAZ: {
-                    type: "string",
+                  categoryId: {
+                    type: "number",
                   },
                   createdAt: {
                     type: "string",
@@ -187,26 +219,58 @@ const categoryDocs = {
                   updatedAt: {
                     type: "string",
                   },
-                  subCategories: {
+                  category: {
+                    type: "object",
+                    properties: {
+                      id: {
+                        type: "number",
+                      },
+                      titleEN: {
+                        type: "string",
+                      },
+                      titleAZ: {
+                        type: "string",
+                      },
+                      image: {
+                        type: "string",
+                      },
+                      createdAt: {
+                        type: "string",
+                      },
+                      updatedAt: {
+                        type: "string",
+                      },
+                    },
+                  },
+                  products: {
                     type: "array",
                     items: {
                       type: "object",
                       properties: {
-                        id: {
-                          type: "number",
+                        id: { type: "number" },
+                        titleEN: { type: "string" },
+                        titleAZ: { type: "string" },
+                        descEN: { type: "string" },
+                        descAZ: { type: "string" },
+                        gram: { type: "string" },
+                        price: { type: "number" },
+                        ingridientsAZ: {
+                          type: "array",
+                          items: {
+                            type: "string",
+                          },
                         },
-                        titleEN: {
-                          type: "string",
+                        ingridientsEN: {
+                          type: "array",
+                          items: {
+                            type: "string",
+                          },
                         },
-                        titleAZ: {
-                          type: "string",
-                        },
-                        createdAt: {
-                          type: "string",
-                        },
-                        updatedAt: {
-                          type: "string",
-                        },
+                        isCombo: { type: "boolean" },
+                        image: { type: "string" },
+                        subCategoryId: { type: "number" },
+                        createdAt: { type: "string" },
+                        updatedAt: { type: "string" },
                       },
                     },
                   },
@@ -216,7 +280,7 @@ const categoryDocs = {
           },
         },
         404: {
-          description: "Category not found",
+          description: "Subcategory not found",
         },
         500: {
           description: "Some server error",
@@ -224,14 +288,14 @@ const categoryDocs = {
       },
     },
     put: {
-      summary: "Update category by id",
+      summary: "Update subcategory by id",
       security: [
         {
           jwtAuth: [],
         },
       ],
-      tags: ["Category"],
-      description: "Update category by id",
+      tags: ["Subcategory"],
+      description: "Update subcategory by id",
       parameters: [
         {
           in: "path",
@@ -250,11 +314,15 @@ const categoryDocs = {
               properties: {
                 titleEN: {
                   type: "string",
-                  description: "Category title in English",
+                  description: "Subcategory title in English",
                 },
                 titleAZ: {
                   type: "string",
-                  description: "Category title in Azerbaijani",
+                  description: "Subcategory title in Azerbaijani",
+                },
+                categoryId: {
+                  type: "number",
+                  description: "Category id",
                 },
               },
             },
@@ -263,7 +331,7 @@ const categoryDocs = {
       },
       responses: {
         200: {
-          description: "Category updated",
+          description: "Subcategory updated",
           content: {
             "application/json": {
               schema: {
@@ -293,7 +361,7 @@ const categoryDocs = {
           },
         },
         404: {
-          description: "Category not found",
+          description: "Subcategory not found",
         },
         500: {
           description: "Some server error",
@@ -301,14 +369,14 @@ const categoryDocs = {
       },
     },
     delete: {
-      summary: "Delete category by id",
+      summary: "Delete subcategory by id",
       security: [
         {
           jwtAuth: [],
         },
       ],
-      tags: ["Category"],
-      description: "Delete category by id",
+      tags: ["Subcategory"],
+      description: "Delete subcategory by id",
       parameters: [
         {
           in: "path",
@@ -321,86 +389,10 @@ const categoryDocs = {
       ],
       responses: {
         204: {
-          description: "Category deleted",
+          description: "Subcategory deleted",
         },
         404: {
-          description: "Category not found",
-        },
-        500: {
-          description: "Some server error",
-        },
-      },
-    },
-  },
-  "/api/v1/category/{id}/update-image": {
-    post: {
-      summary: "Update category image by id",
-      security: [
-        {
-          jwtAuth: [],
-        },
-      ],
-      tags: ["Category"],
-      description: "Update category image by id",
-      parameters: [
-        {
-          in: "path",
-          name: "id",
-          required: true,
-          schema: {
-            type: "number",
-          },
-        },
-      ],
-      requestBody: {
-        content: {
-          "multipart/form-data": {
-            schema: {
-              type: "object",
-              required: ["image"],
-              properties: {
-                image: {
-                  type: "file",
-                  description: "Category image",
-                },
-              },
-            },
-          },
-        },
-      },
-      responses: {
-        200: {
-          description: "Category image updated",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  id: {
-                    type: "number",
-                  },
-                  titleEN: {
-                    type: "string",
-                  },
-                  titleAZ: {
-                    type: "string",
-                  },
-                  image: {
-                    type: "string",
-                  },
-                  createdAt: {
-                    type: "string",
-                  },
-                  updatedAt: {
-                    type: "string",
-                  },
-                },
-              },
-            },
-          },
-        },
-        404: {
-          description: "Category not found",
+          description: "Subcategory not found",
         },
         500: {
           description: "Some server error",
@@ -410,4 +402,4 @@ const categoryDocs = {
   },
 };
 
-export default categoryDocs;
+export default subCategoryDocs;

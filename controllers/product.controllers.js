@@ -40,7 +40,7 @@ export const getProduct = catchAsyncErrors(async (req, res, next) => {
       },
     })
     .catch((error) => {
-      return next(new ErrorHandler(error.message, 500));
+      return next(new ErrorHandler(error.message, 404));
     });
 
   if (!product) {
@@ -110,7 +110,7 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
       },
     })
     .catch((error) => {
-      return next(new ErrorHandler(error.message, 500));
+      return next(new ErrorHandler(error.message, 404));
     });
 
   res.status(200).send(product);
@@ -124,7 +124,7 @@ export const deleteProduct = catchAsyncErrors(async (req, res, next) => {
       },
     })
     .catch((error) => {
-      return next(new ErrorHandler(error.message, 500));
+      return next(new ErrorHandler(error.message, 404));
     });
 
   res.status(204).send();
