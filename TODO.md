@@ -1,4 +1,0 @@
-- add swagger docs
-- search to convert to typescript
-- run as a service
-- try to with cluster
