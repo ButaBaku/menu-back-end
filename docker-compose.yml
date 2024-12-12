@@ -10,6 +10,7 @@ services:
       - "80:80"
     volumes:
       - ./public:/app/public
+      - ./log:/app/logs
     env_file:
       - .env
     restart: always
