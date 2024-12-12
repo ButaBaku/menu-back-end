@@ -9,7 +9,8 @@ import os from "os";
 import app from "../app.js";
 import http from "http";
 
-const numCPUs = os.cpus().length; // Get the number of CPU cores
+// const numCPUs = os.cpus().length;
+const numCPUs = 1;
 
 if (cluster.isPrimary) {
   console.log(`Master process started with PID: ${process.pid}`);

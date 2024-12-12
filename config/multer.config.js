@@ -2,11 +2,11 @@ import multer from "multer";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/"); // Folder where images will be stored
+    cb(null, `public/`);
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    return cb(null, uniqueSuffix + "-" + file.originalname);
+    return cb(null, req.folder + "/" + uniqueSuffix + "-" + file.originalname);
   },
 });
 

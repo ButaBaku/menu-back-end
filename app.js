@@ -11,6 +11,7 @@ import subcategoryRouter from "./routes/subcategory.routes.js";
 import productRouter from "./routes/product.routes.js";
 
 import ErrorHandler from "./utils/errorHandler.js";
+import logger from "./config/winston.config.js";
 
 import { specs } from "./config/swagger.config.js";
 
@@ -22,6 +23,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use((req, res, next) => {
+  logger.info(`Incoming Request: ${req.method} ${req.url}`);
+  next();
+});
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/category", categoryRouter);
@@ -37,6 +43,7 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
+  logger.error(`Error occurred(${err.statusCode}): ${err.message}`);
   res.status(err.statusCode || 500).send({
     error: err.message || "Internal server error",
   });

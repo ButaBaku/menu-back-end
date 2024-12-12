@@ -1,0 +1,47 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Deploy to DigitalOcean
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }} # Default is 22 if not specified
+          script: |
+            cd /root/buta-baku-app
+
+            repo_url="https://xelilovkamran:${{ secrets.G_ACCESS_TOKEN }}@github.com/xelilovkamran/buta-baku-app.git"
+
+            if [ ! -d ".git" ]
+            then
+              echo "Repository not found, cloning..."
+              git clone $repo_url .
+            else
+              git restore --staged .
+              git restore .
+              echo "Repository found, pulling updates..."
+              git pull $repo_url --ff-only
+            fi # This 'fi' closes the 'if' block
+
+            # Pull the latest code from the GitHub repository
+            git pull origin main
+
+            # Run your docker-compose commands
+            docker-compose -f docker-compose.yml up --build -d

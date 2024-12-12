@@ -2,11 +2,7 @@ const authDocs = {
   "/api/v1/auth/signup": {
     post: {
       summary: "Create a new user",
-      security: [
-        {
-          jwtAuth: [],
-        },
-      ],
+      security: [],
       tags: ["Auth"],
       description: "Register a new user",
       requestBody: {

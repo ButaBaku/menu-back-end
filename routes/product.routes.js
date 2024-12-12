@@ -15,7 +15,15 @@ const router = express.Router();
 router
   .route("/")
   .get(isAuthendicatedUser, getProducts)
-  .post(isAuthendicatedUser, upload.single("image"), createProduct);
+  .post(
+    isAuthendicatedUser,
+    (req, res, next) => {
+      req.folder = "products";
+      next();
+    },
+    upload.single("image"),
+    createProduct
+  );
 
 router
   .route("/:id")
@@ -23,8 +31,14 @@ router
   .put(isAuthendicatedUser, updateProduct)
   .delete(isAuthendicatedUser, deleteProduct);
 
-router
-  .route("/:id/update-image")
-  .post(isAuthendicatedUser, upload.single("image"), updateProductImage);
+router.route("/:id/update-image").post(
+  isAuthendicatedUser,
+  (req, res, next) => {
+    req.folder = "products";
+    next();
+  },
+  upload.single("image"),
+  updateProductImage
+);
 
 export default router;

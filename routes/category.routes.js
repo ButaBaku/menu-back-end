@@ -15,7 +15,15 @@ const router = express.Router();
 router
   .route("/")
   .get(isAuthendicatedUser, getCategories)
-  .post(isAuthendicatedUser, upload.single("image"), createCategory);
+  .post(
+    isAuthendicatedUser,
+    (req, res, next) => {
+      req.folder = "categories";
+      next();
+    },
+    upload.single("image", "asdasd"),
+    createCategory
+  );
 
 router
   .route("/:id")
@@ -23,8 +31,14 @@ router
   .put(isAuthendicatedUser, updateCategory)
   .delete(isAuthendicatedUser, deleteCategory);
 
-router
-  .route("/:id/update-image")
-  .post(isAuthendicatedUser, upload.single("image"), updateCategoryImage);
+router.route("/:id/update-image").post(
+  isAuthendicatedUser,
+  (req, res, next) => {
+    req.folder = "categories";
+    next();
+  },
+  upload.single("image"),
+  updateCategoryImage
+);
 
 export default router;
