@@ -2,11 +2,7 @@ const subCategoryDocs = {
   "/api/v1/subcategory": {
     get: {
       summary: "Get all subcategories",
-      security: [
-        {
-          jwtAuth: [],
-        },
-      ],
+      security: [],
       tags: ["Subcategory"],
       description: "Get all subcategories",
       responses: {
@@ -176,11 +172,7 @@ const subCategoryDocs = {
   "/api/v1/subcategory/{id}": {
     get: {
       summary: "Get subcategory by id",
-      security: [
-        {
-          jwtAuth: [],
-        },
-      ],
+      security: [],
       tags: ["Subcategory"],
       description: "Get subcategory by id",
       parameters: [

@@ -12,12 +12,12 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(isAuthendicatedUser, getSubcategories)
+  .get(getSubcategories)
   .post(isAuthendicatedUser, createSubcategory);
 
 router
   .route("/:id")
-  .get(isAuthendicatedUser, getSubcategory)
+  .get(getSubcategory)
   .put(isAuthendicatedUser, updateSubcategory)
   .delete(isAuthendicatedUser, deleteSubcategory);
 

@@ -14,7 +14,7 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(isAuthendicatedUser, getProducts)
+  .get(getProducts)
   .post(
     isAuthendicatedUser,
     (req, res, next) => {
@@ -27,7 +27,7 @@ router
 
 router
   .route("/:id")
-  .get(isAuthendicatedUser, getProduct)
+  .get(getProduct)
   .put(isAuthendicatedUser, updateProduct)
   .delete(isAuthendicatedUser, deleteProduct);
 

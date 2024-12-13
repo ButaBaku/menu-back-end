@@ -1,3 +1,4 @@
 node_modules
 public/*/*
 TODO.md
+logs/*.log

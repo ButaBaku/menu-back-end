@@ -2,11 +2,7 @@ const productDocs = {
   "/api/v1/product": {
     get: {
       summary: "Get all products",
-      security: [
-        {
-          jwtAuth: [],
-        },
-      ],
+      security: [],
       tags: ["Product"],
       description: "Get all products",
       responses: {
@@ -258,11 +254,7 @@ const productDocs = {
   "/api/v1/product/{id}": {
     get: {
       summary: "Get product by id",
-      security: [
-        {
-          jwtAuth: [],
-        },
-      ],
+      security: [],
       tags: ["Product"],
       description: "Get product by id",
       parameters: [

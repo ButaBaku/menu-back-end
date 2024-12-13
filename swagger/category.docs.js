@@ -2,11 +2,7 @@ const categoryDocs = {
   "/api/v1/category": {
     get: {
       summary: "Get all categories",
-      security: [
-        {
-          jwtAuth: [],
-        },
-      ],
+      security: [],
       tags: ["Category"],
       description: "Get all categories",
       responses: {
@@ -144,11 +140,7 @@ const categoryDocs = {
   "/api/v1/category/{id}": {
     get: {
       summary: "Get category by id",
-      security: [
-        {
-          jwtAuth: [],
-        },
-      ],
+      security: [],
       tags: ["Category"],
       description: "Get category by id",
       parameters: [

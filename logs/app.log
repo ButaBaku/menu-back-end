@@ -76,3 +76,27 @@ Argument `ingridientsAZ`: Invalid value provided. Expected ProductCreateingridie
 [2024-12-13 09:48:53] INFO: Incoming Request: POST /api/v1/auth/login
 [2024-12-13 09:48:53] INFO: Attempt to login user
 [2024-12-13 09:48:54] INFO: User logged in successfully
+[2024-12-13 10:14:49] INFO: Incoming Request: GET /api/docs/
+[2024-12-13 10:14:49] INFO: Incoming Request: GET /api/docs/swagger-ui.css
+[2024-12-13 10:14:49] INFO: Incoming Request: GET /api/docs/swagger-ui-bundle.js
+[2024-12-13 10:14:49] INFO: Incoming Request: GET /api/docs/swagger-ui-standalone-preset.js
+[2024-12-13 10:14:49] INFO: Incoming Request: GET /api/docs/swagger-ui-init.js
+[2024-12-13 10:14:50] INFO: Incoming Request: GET /api/docs/favicon-32x32.png
+[2024-12-13 10:15:05] INFO: Incoming Request: GET /api/v1/category
+[2024-12-13 10:15:05] INFO: Fetching all categories
+[2024-12-13 10:15:10] ERROR: Error fetching categories
+[2024-12-13 10:15:10] ERROR: Error occurred(500): 
+Invalid `prisma.category.findMany()` invocation:
+
+
+Can't reach database server at `164.92.190.92:5432`
+
+Please make sure your database server is running at `164.92.190.92:5432`.
+[2024-12-13 10:22:25] INFO: Incoming Request: GET /api/docs/
+[2024-12-13 10:22:25] INFO: Incoming Request: GET /api/docs/swagger-ui.css
+[2024-12-13 10:22:25] INFO: Incoming Request: GET /api/docs/swagger-ui-bundle.js
+[2024-12-13 10:22:25] INFO: Incoming Request: GET /api/docs/swagger-ui-standalone-preset.js
+[2024-12-13 10:22:25] INFO: Incoming Request: GET /api/docs/swagger-ui-init.js
+[2024-12-13 10:22:30] INFO: Incoming Request: GET /api/v1/category
+[2024-12-13 10:22:30] INFO: Fetching all categories
+[2024-12-13 10:22:30] INFO: Successfully fetched categories
