@@ -5,7 +5,6 @@
  */
 
 import cluster from "cluster";
-import os from "os";
 import app from "../app.js";
 import http from "http";
 

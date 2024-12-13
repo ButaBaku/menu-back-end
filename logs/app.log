@@ -66,3 +66,13 @@ Argument `ingridientsAZ`: Invalid value provided. Expected ProductCreateingridie
 [2024-12-13 02:23:46] ERROR: Error occurred(401): Invalid credentials
 [2024-12-13 02:23:59] INFO: Incoming Request: POST /api/v1/auth/signup
 [2024-12-13 02:23:59] ERROR: Error occurred(400): This user already exists
+[2024-12-13 09:48:10] INFO: Incoming Request: GET /api/docs/
+[2024-12-13 09:48:11] INFO: Incoming Request: GET /api/docs/swagger-ui.css
+[2024-12-13 09:48:11] INFO: Incoming Request: GET /api/docs/swagger-ui-bundle.js
+[2024-12-13 09:48:11] INFO: Incoming Request: GET /api/docs/swagger-ui-standalone-preset.js
+[2024-12-13 09:48:11] INFO: Incoming Request: GET /api/docs/swagger-ui-init.js
+[2024-12-13 09:48:37] INFO: Incoming Request: POST /api/v1/auth/login
+[2024-12-13 09:48:37] ERROR: Error occurred(undefined): logger is not defined
+[2024-12-13 09:48:53] INFO: Incoming Request: POST /api/v1/auth/login
+[2024-12-13 09:48:53] INFO: Attempt to login user
+[2024-12-13 09:48:54] INFO: User logged in successfully
