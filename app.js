@@ -9,6 +9,7 @@ import authRouter from "./routes/auth.routes.js";
 import categoryRouter from "./routes/category.routes.js";
 import subcategoryRouter from "./routes/subcategory.routes.js";
 import productRouter from "./routes/product.routes.js";
+import infoRouter from "./routes/info.routes.js";
 
 import ErrorHandler from "./utils/errorHandler.js";
 import logger from "./config/winston.config.js";
@@ -19,8 +20,8 @@ const app = express();
 const __dirname = path.resolve();
 
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json()); // To parse JSON request bodies
+app.use(express.urlencoded({ extended: true })); // To parse URL-encoded bodies
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -33,6 +34,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/subcategory", subcategoryRouter);
 app.use("/api/v1/product", productRouter);
+app.use("/api/v1/info", infoRouter);
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs));
 

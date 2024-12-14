@@ -53,3 +53,16 @@ model Product {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Info {
+  id        Int      @id @default(autoincrement())
+  logo   String
+  titleEN      String
+  titleAZ      String
+  phoneNumbers String[]
+  addressEN String
+  addressAZ String
+  instagram String?
+  facebook String?
+  whatsapp String?
+}

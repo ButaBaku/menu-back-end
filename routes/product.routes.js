@@ -9,8 +9,11 @@ import {
   // updateProductImage,
 } from "../controllers/product.controllers.js";
 import upload from "../config/multer.config.js";
+import { PrismaClient } from "@prisma/client";
 
 const router = express.Router();
+
+const prisma = new PrismaClient();
 
 router
   .route("/")

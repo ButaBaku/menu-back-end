@@ -139,12 +139,12 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
         titleAZ: data.titleAZ,
         descEN: data.descEN,
         descAZ: data.descAZ,
-        price: data.price,
+        price: Number(data.price),
         gram: data.gram,
         isCombo: data.isCombo,
         ingridientsAZ: data.ingridientsAZ,
         ingridientsEN: data.ingridientsEN,
-        subCategoryId: data.subCategoryId,
+        subCategoryId: Number(data.subCategoryId),
       },
     })
     .catch((error) => {
