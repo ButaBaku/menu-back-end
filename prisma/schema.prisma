@@ -40,14 +40,14 @@ model Product {
   id        Int      @id @default(autoincrement())
   titleEN      String
   titleAZ      String
-  descEN String
-  descAZ String
-  gram String
-  price     Float @default(0)
+  descEN String?
+  descAZ String?
+  gram String?
+  price     Float
   ingridientsAZ String[]
   ingridientsEN String[]
   isCombo Boolean @default(false)
-  image    String
+  image    String?
   subCategory  SubCategory @relation(fields: [subCategoryId], references: [id], onDelete: Cascade)
   subCategoryId Int
   createdAt DateTime @default(now())

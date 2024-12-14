@@ -79,16 +79,14 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
 
   try {
     const formData = req.body;
-    const imagePath = `http://${req.headers.host}/${req.file.filename}`;
+    const imagePath = `http://${req.headers.host}/${req?.file?.filename}`;
 
     // Validate user input
     const { error } = productSchema.safeParse({
       titleEN: formData.titleEN,
       titleAZ: formData.titleAZ,
-      descEN: formData.descEN,
-      descAZ: formData.descAZ,
-      gram: formData.gram,
-      subCategoryId: Number(formData.subCategoryId),
+      price: formData.price && Number(formData.price),
+      subCategoryId: formData.subCategoryId && Number(formData.subCategoryId),
     });
 
     if (error) {
@@ -103,7 +101,7 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
         descEN: formData.descEN,
         descAZ: formData.descAZ,
         price: Number(formData.price),
-        image: imagePath,
+        image: req?.file && imagePath,
         gram: formData.gram,
         isCombo: formData.isCombo === "true",
         ingridientsAZ: formData.ingridientsAZ,
