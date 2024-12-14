@@ -57,6 +57,7 @@ model Product {
 model Info {
   id        Int      @id @default(autoincrement())
   logo   String
+  backgroundImage   String
   titleEN      String
   titleAZ      String
   phoneNumbers String[]
