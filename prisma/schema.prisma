@@ -67,3 +67,14 @@ model Info {
   facebook String?
   whatsapp String?
 }
+
+model Campaign {
+  id        Int      @id @default(autoincrement())
+  titleEN      String
+  titleAZ      String
+  textEN String?
+  textAZ String?
+  image    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

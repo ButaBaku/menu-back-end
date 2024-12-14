@@ -10,6 +10,7 @@ import categoryRouter from "./routes/category.routes.js";
 import subcategoryRouter from "./routes/subcategory.routes.js";
 import productRouter from "./routes/product.routes.js";
 import infoRouter from "./routes/info.routes.js";
+import campaignRouter from "./routes/campaign.routes.js";
 
 import ErrorHandler from "./utils/errorHandler.js";
 import logger from "./config/winston.config.js";
@@ -35,6 +36,7 @@ app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/subcategory", subcategoryRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/info", infoRouter);
+app.use("/api/v1/campaign", campaignRouter);
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
