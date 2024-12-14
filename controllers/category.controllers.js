@@ -88,7 +88,7 @@ export const createCategory = catchAsyncErrors(async (req, res, next) => {
 
   try {
     const formData = req.body;
-    const imagePath = `/${req.file.filename}`;
+    const imagePath = `http://${req.headers.host}/${req.file.filename}`;
 
     const { error } = categorySchema.safeParse({
       titleEN: formData.titleEN,
@@ -182,7 +182,7 @@ export const updateCategoryImage = catchAsyncErrors(async (req, res, next) => {
   const category = await prisma.category
     .update({
       where: { id: parseInt(req.params.id) },
-      data: { image: `/${req.file.filename}` },
+      data: { image: `http://${req.headers.host}/${req.file.filename}` },
     })
     .catch((error) => {
       logger.error("Error updating category image", {

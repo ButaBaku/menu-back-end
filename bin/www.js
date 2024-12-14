@@ -12,7 +12,7 @@ import http from "http";
 const numCPUs = 1;
 
 if (cluster.isPrimary) {
-  console.log(`Master process started with PID: ${process.pid}`);
+  // console.log(`Master process started with PID: ${process.pid}`);
 
   // Fork workers (one for each CPU core)
   for (let i = 0; i < numCPUs; i++) {
@@ -21,7 +21,7 @@ if (cluster.isPrimary) {
 
   // Restart worker if it dies
   cluster.on("exit", (worker, code, signal) => {
-    console.log(`Worker with PID: ${worker.process.pid} died. Restarting...`);
+    // console.log(`Worker with PID: ${worker.process.pid} died. Restarting...`);
     cluster.fork();
   });
 } else {
@@ -94,6 +94,6 @@ if (cluster.isPrimary) {
     const addr = server.address();
     const bind =
       typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-    console.log(`Worker with PID: ${process.pid} is listening on ${bind}`);
+    // console.log(`Worker with PID: ${process.pid} is listening on ${bind}`);
   }
 }

@@ -79,7 +79,7 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
 
   try {
     const formData = req.body;
-    const imagePath = `/${req.file.filename}`;
+    const imagePath = `http://${req.headers.host}/${req.file.filename}`;
 
     // Validate user input
     const { error } = productSchema.safeParse({
@@ -197,7 +197,7 @@ export const updateProductImage = catchAsyncErrors(async (req, res, next) => {
         id: parseInt(req.params.id),
       },
       data: {
-        image: `/${req.file.filename}`,
+        image: `http://${req.headers.host}/${req.file.filename}`,
       },
     })
     .catch((error) => {
