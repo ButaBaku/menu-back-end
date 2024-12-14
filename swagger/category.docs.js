@@ -324,82 +324,82 @@ const categoryDocs = {
       },
     },
   },
-  "/api/v1/category/{id}/update-image": {
-    post: {
-      summary: "Update category image by id",
-      security: [
-        {
-          jwtAuth: [],
-        },
-      ],
-      tags: ["Category"],
-      description: "Update category image by id",
-      parameters: [
-        {
-          in: "path",
-          name: "id",
-          required: true,
-          schema: {
-            type: "number",
-          },
-        },
-      ],
-      requestBody: {
-        content: {
-          "multipart/form-data": {
-            schema: {
-              type: "object",
-              required: ["image"],
-              properties: {
-                image: {
-                  type: "file",
-                  description: "Category image",
-                },
-              },
-            },
-          },
-        },
-      },
-      responses: {
-        200: {
-          description: "Category image updated",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  id: {
-                    type: "number",
-                  },
-                  titleEN: {
-                    type: "string",
-                  },
-                  titleAZ: {
-                    type: "string",
-                  },
-                  image: {
-                    type: "string",
-                  },
-                  createdAt: {
-                    type: "string",
-                  },
-                  updatedAt: {
-                    type: "string",
-                  },
-                },
-              },
-            },
-          },
-        },
-        404: {
-          description: "Category not found",
-        },
-        500: {
-          description: "Some server error",
-        },
-      },
-    },
-  },
+  // "/api/v1/category/{id}/update-image": {
+  //   post: {
+  //     summary: "Update category image by id",
+  //     security: [
+  //       {
+  //         jwtAuth: [],
+  //       },
+  //     ],
+  //     tags: ["Category"],
+  //     description: "Update category image by id",
+  //     parameters: [
+  //       {
+  //         in: "path",
+  //         name: "id",
+  //         required: true,
+  //         schema: {
+  //           type: "number",
+  //         },
+  //       },
+  //     ],
+  //     requestBody: {
+  //       content: {
+  //         "multipart/form-data": {
+  //           schema: {
+  //             type: "object",
+  //             required: ["image"],
+  //             properties: {
+  //               image: {
+  //                 type: "file",
+  //                 description: "Category image",
+  //               },
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //     responses: {
+  //       200: {
+  //         description: "Category image updated",
+  //         content: {
+  //           "application/json": {
+  //             schema: {
+  //               type: "object",
+  //               properties: {
+  //                 id: {
+  //                   type: "number",
+  //                 },
+  //                 titleEN: {
+  //                   type: "string",
+  //                 },
+  //                 titleAZ: {
+  //                   type: "string",
+  //                 },
+  //                 image: {
+  //                   type: "string",
+  //                 },
+  //                 createdAt: {
+  //                   type: "string",
+  //                 },
+  //                 updatedAt: {
+  //                   type: "string",
+  //                 },
+  //               },
+  //             },
+  //           },
+  //         },
+  //       },
+  //       404: {
+  //         description: "Category not found",
+  //       },
+  //       500: {
+  //         description: "Some server error",
+  //       },
+  //     },
+  //   },
+  // },
 };
 
 export default categoryDocs;

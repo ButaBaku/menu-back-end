@@ -171,29 +171,29 @@ export const deleteCategory = catchAsyncErrors(async (req, res, next) => {
   res.status(204).send({ message: "Category deleted successfully" });
 });
 
-// Update category image
-export const updateCategoryImage = catchAsyncErrors(async (req, res, next) => {
-  logger.info("Updating category image", {
-    method: req.method,
-    url: req.originalUrl,
-    categoryId: req.params.id,
-  });
+// // Update category image
+// export const updateCategoryImage = catchAsyncErrors(async (req, res, next) => {
+//   logger.info("Updating category image", {
+//     method: req.method,
+//     url: req.originalUrl,
+//     categoryId: req.params.id,
+//   });
 
-  const category = await prisma.category
-    .update({
-      where: { id: parseInt(req.params.id) },
-      data: { image: `http://${req.headers.host}/${req.file.filename}` },
-    })
-    .catch((error) => {
-      logger.error("Error updating category image", {
-        error: error.message,
-        categoryId: req.params.id,
-      });
-      return next(new ErrorHandler("Category not found", 404));
-    });
+//   const category = await prisma.category
+//     .update({
+//       where: { id: parseInt(req.params.id) },
+//       data: { image: `http://${req.headers.host}/${req.file.filename}` },
+//     })
+//     .catch((error) => {
+//       logger.error("Error updating category image", {
+//         error: error.message,
+//         categoryId: req.params.id,
+//       });
+//       return next(new ErrorHandler("Category not found", 404));
+//     });
 
-  logger.info("Category image updated successfully", {
-    categoryId: req.params.id,
-  });
-  res.status(200).send(category);
-});
+//   logger.info("Category image updated successfully", {
+//     categoryId: req.params.id,
+//   });
+//   res.status(200).send(category);
+// });

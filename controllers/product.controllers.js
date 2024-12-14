@@ -184,32 +184,32 @@ export const deleteProduct = catchAsyncErrors(async (req, res, next) => {
   res.status(204).send();
 });
 
-export const updateProductImage = catchAsyncErrors(async (req, res, next) => {
-  logger.info("Updating product image", {
-    method: req.method,
-    url: req.originalUrl,
-    productId: req.params.id,
-  });
+// export const updateProductImage = catchAsyncErrors(async (req, res, next) => {
+//   logger.info("Updating product image", {
+//     method: req.method,
+//     url: req.originalUrl,
+//     productId: req.params.id,
+//   });
 
-  const product = await prisma.product
-    .update({
-      where: {
-        id: parseInt(req.params.id),
-      },
-      data: {
-        image: `http://${req.headers.host}/${req.file.filename}`,
-      },
-    })
-    .catch((error) => {
-      logger.error("Error updating product image", {
-        error: error.message,
-        productId: req.params.id,
-      });
-      return next(new ErrorHandler(error.message, 500));
-    });
+//   const product = await prisma.product
+//     .update({
+//       where: {
+//         id: parseInt(req.params.id),
+//       },
+//       data: {
+//         image: `http://${req.headers.host}/${req.file.filename}`,
+//       },
+//     })
+//     .catch((error) => {
+//       logger.error("Error updating product image", {
+//         error: error.message,
+//         productId: req.params.id,
+//       });
+//       return next(new ErrorHandler(error.message, 500));
+//     });
 
-  logger.info("Product image updated successfully", {
-    productId: req.params.id,
-  });
-  res.status(200).send(product);
-});
+//   logger.info("Product image updated successfully", {
+//     productId: req.params.id,
+//   });
+//   res.status(200).send(product);
+// });

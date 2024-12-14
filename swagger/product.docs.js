@@ -587,102 +587,102 @@ const productDocs = {
       },
     },
   },
-  "/api/v1/product/{id}/update-image": {
-    post: {
-      summary: "Update product image by id",
-      security: [
-        {
-          jwtAuth: [],
-        },
-      ],
-      tags: ["Product"],
-      description: "Update product image by id",
-      parameters: [
-        {
-          in: "path",
-          name: "id",
-          required: true,
-          schema: {
-            type: "number",
-          },
-        },
-      ],
-      requestBody: {
-        content: {
-          "multipart/form-data": {
-            schema: {
-              type: "object",
-              required: ["image"],
-              properties: {
-                image: {
-                  type: "file",
-                  description: "Product image",
-                },
-              },
-            },
-          },
-        },
-      },
-      responses: {
-        200: {
-          description: "Product image updated",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  id: {
-                    type: "number",
-                  },
-                  titleEN: {
-                    type: "string",
-                  },
-                  titleAZ: {
-                    type: "string",
-                  },
-                  descEN: {
-                    type: "string",
-                  },
-                  descAZ: {
-                    type: "string",
-                  },
-                  gram: {
-                    type: "string",
-                  },
-                  price: {
-                    type: "number",
-                  },
-                  ingridientsAZ: {
-                    type: "array",
-                    properties: {
-                      type: "string",
-                    },
-                  },
-                  ingridientsEN: {
-                    type: "array",
-                    properties: {
-                      type: "string",
-                    },
-                  },
-                  isCombo: { type: "boolean" },
-                  image: { type: "string" },
-                  subCategoryId: { type: "number" },
-                  createdAt: { type: "string" },
-                  updatedAt: { type: "string" },
-                },
-              },
-            },
-          },
-        },
-        404: {
-          description: "Product not found",
-        },
-        500: {
-          description: "Some server error",
-        },
-      },
-    },
-  },
+  // "/api/v1/product/{id}/update-image": {
+  //   post: {
+  //     summary: "Update product image by id",
+  //     security: [
+  //       {
+  //         jwtAuth: [],
+  //       },
+  //     ],
+  //     tags: ["Product"],
+  //     description: "Update product image by id",
+  //     parameters: [
+  //       {
+  //         in: "path",
+  //         name: "id",
+  //         required: true,
+  //         schema: {
+  //           type: "number",
+  //         },
+  //       },
+  //     ],
+  //     requestBody: {
+  //       content: {
+  //         "multipart/form-data": {
+  //           schema: {
+  //             type: "object",
+  //             required: ["image"],
+  //             properties: {
+  //               image: {
+  //                 type: "file",
+  //                 description: "Product image",
+  //               },
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //     responses: {
+  //       200: {
+  //         description: "Product image updated",
+  //         content: {
+  //           "application/json": {
+  //             schema: {
+  //               type: "object",
+  //               properties: {
+  //                 id: {
+  //                   type: "number",
+  //                 },
+  //                 titleEN: {
+  //                   type: "string",
+  //                 },
+  //                 titleAZ: {
+  //                   type: "string",
+  //                 },
+  //                 descEN: {
+  //                   type: "string",
+  //                 },
+  //                 descAZ: {
+  //                   type: "string",
+  //                 },
+  //                 gram: {
+  //                   type: "string",
+  //                 },
+  //                 price: {
+  //                   type: "number",
+  //                 },
+  //                 ingridientsAZ: {
+  //                   type: "array",
+  //                   properties: {
+  //                     type: "string",
+  //                   },
+  //                 },
+  //                 ingridientsEN: {
+  //                   type: "array",
+  //                   properties: {
+  //                     type: "string",
+  //                   },
+  //                 },
+  //                 isCombo: { type: "boolean" },
+  //                 image: { type: "string" },
+  //                 subCategoryId: { type: "number" },
+  //                 createdAt: { type: "string" },
+  //                 updatedAt: { type: "string" },
+  //               },
+  //             },
+  //           },
+  //         },
+  //       },
+  //       404: {
+  //         description: "Product not found",
+  //       },
+  //       500: {
+  //         description: "Some server error",
+  //       },
+  //     },
+  //   },
+  // },
 };
 
 export default productDocs;
