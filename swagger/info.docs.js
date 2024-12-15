@@ -2,11 +2,7 @@ const infoDocs = {
   "/api/v1/info": {
     get: {
       summary: "Get info",
-      security: [
-        {
-          jwtAuth: [],
-        },
-      ],
+      security: [],
       tags: ["Info"],
       description: "Get info",
       responses: {
