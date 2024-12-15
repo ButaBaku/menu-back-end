@@ -125,15 +125,7 @@ const productDocs = {
           "multipart/form-data": {
             schema: {
               type: "object",
-              required: [
-                "titleEN",
-                "titleAZ",
-                "descEN",
-                "descAZ",
-                "image",
-                "gram",
-                "subCategoryId",
-              ],
+              required: ["titleEN", "titleAZ", "price", "subCategoryId"],
               properties: {
                 titleEN: {
                   type: "string",
@@ -394,7 +386,7 @@ const productDocs = {
       ],
       requestBody: {
         content: {
-          "application/json": {
+          "multipart/form-data": {
             schema: {
               type: "object",
               properties: {
@@ -417,6 +409,10 @@ const productDocs = {
                 price: {
                   type: "number",
                   description: "Product price",
+                },
+                image: {
+                  type: "file",
+                  description: "Product image",
                 },
                 gram: {
                   type: "string",

@@ -236,7 +236,7 @@ const categoryDocs = {
       ],
       requestBody: {
         content: {
-          "application/json": {
+          "multipart/form-data": {
             schema: {
               type: "object",
               properties: {
@@ -247,6 +247,10 @@ const categoryDocs = {
                 titleAZ: {
                   type: "string",
                   description: "Category title in Azerbaijani",
+                },
+                image: {
+                  type: "file",
+                  description: "Category image",
                 },
               },
             },

@@ -126,6 +126,7 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
   });
 
   const data = req.body;
+  console.log(Number(data.price));
 
   const product = await prisma.product
     .update({
@@ -137,12 +138,14 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
         titleAZ: data.titleAZ,
         descEN: data.descEN,
         descAZ: data.descAZ,
-        price: Number(data.price),
+        price: data.price ? Number(data.price) : undefined,
         gram: data.gram,
         isCombo: data.isCombo,
         ingridientsAZ: data.ingridientsAZ,
         ingridientsEN: data.ingridientsEN,
-        subCategoryId: Number(data.subCategoryId),
+        subCategoryId: data.subCategoryId
+          ? Number(data.subCategoryId)
+          : undefined,
       },
     })
     .catch((error) => {
@@ -150,7 +153,7 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
         error: error.message,
         productId: req.params.id,
       });
-      return next(new ErrorHandler(error.message, 404));
+      next(new ErrorHandler(error.message, 404));
     });
 
   logger.info("Product updated successfully", { productId: req.params.id });
