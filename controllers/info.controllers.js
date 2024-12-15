@@ -5,6 +5,26 @@ import logger from "../config/winston.config.js";
 
 const prisma = new PrismaClient();
 
+// Get info
+export const getInfo = catchAsyncErrors(async (req, res, next) => {
+  logger.info("Getting info", {
+    method: req.method,
+    url: req.originalUrl,
+  });
+
+  const info = await prisma.info.findUnique({
+    where: { id: 1 },
+  });
+
+  if (!info) {
+    logger.error("Info not found", { infoId: req.params.id });
+    return next(new ErrorHandler("Info not found", 404));
+  }
+
+  logger.info("Info found successfully");
+  res.status(200).send(info);
+});
+
 // Update category
 export const updateInfo = catchAsyncErrors(async (req, res, next) => {
   logger.info("Updating info", {
