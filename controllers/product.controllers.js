@@ -8,7 +8,6 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 const prisma = new PrismaClient();
 // Get all products
 export const getProducts = catchAsyncErrors(async (req, res, next) => {
-  console.log(req.app.get("env"));
   try {
     logger.info("Bütün məhsulların əldə edilməsi üçün sorğu başladı", {
       method: req.method,
