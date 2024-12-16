@@ -26,7 +26,9 @@ export const getSubcategories = catchAsyncErrors(async (req, res, next) => {
       subcategoryCount: subcategories.length,
     });
 
-    res.status(200).send(subcategories);
+    res
+      .status(200)
+      .send(subcategories.sort((a, b) => b.updatedAt - a.updatedAt));
   } catch (error) {
     // Handle Prisma known request errors
     if (error instanceof PrismaClientKnownRequestError) {
