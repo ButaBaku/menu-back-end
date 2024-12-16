@@ -1,13 +1,13 @@
-const categoryDocs = {
-  "/api/v1/category": {
+const campaigndocs = {
+  "/api/v1/campaign": {
     get: {
-      summary: "Get all categories",
+      summary: "Get all campaigns",
       security: [],
-      tags: ["Category"],
-      description: "Get all categories",
+      tags: ["Campaign"],
+      description: "Get all campaigns",
       responses: {
         200: {
-          description: "All categories",
+          description: "All campaigns",
           content: {
             "application/json": {
               schema: {
@@ -24,6 +24,12 @@ const categoryDocs = {
                     titleAZ: {
                       type: "string",
                     },
+                    textEN: {
+                      type: "string",
+                    },
+                    textAZ: {
+                      type: "string",
+                    },
                     image: {
                       type: "string",
                     },
@@ -32,29 +38,6 @@ const categoryDocs = {
                     },
                     updatedAt: {
                       type: "string",
-                    },
-                    subCategories: {
-                      type: "array",
-                      items: {
-                        type: "object",
-                        properties: {
-                          id: {
-                            type: "number",
-                          },
-                          titleEN: {
-                            type: "string",
-                          },
-                          titleAZ: {
-                            type: "string",
-                          },
-                          createdAt: {
-                            type: "string",
-                          },
-                          updatedAt: {
-                            type: "string",
-                          },
-                        },
-                      },
                     },
                   },
                 },
@@ -68,14 +51,14 @@ const categoryDocs = {
       },
     },
     post: {
-      summary: "Create new category",
+      summary: "Create new campaign",
       security: [
         {
           jwtAuth: [],
         },
       ],
-      tags: ["Category"],
-      description: "Create new category",
+      tags: ["Campaign"],
+      description: "Create new campaign",
       requestBody: {
         content: {
           "multipart/form-data": {
@@ -85,15 +68,23 @@ const categoryDocs = {
               properties: {
                 titleEN: {
                   type: "string",
-                  description: "Category title in English",
+                  description: "Campaign title in English",
                 },
                 titleAZ: {
                   type: "string",
-                  description: "Category title in Azerbaijani",
+                  description: "Campaign title in Azerbaijani",
+                },
+                textEN: {
+                  type: "string",
+                  description: "Campaign text in English",
+                },
+                textAZ: {
+                  type: "string",
+                  description: "Campaign text in Azerbaijani",
                 },
                 image: {
                   type: "file",
-                  description: "Category image",
+                  description: "Campaign image",
                 },
               },
             },
@@ -102,7 +93,7 @@ const categoryDocs = {
       },
       responses: {
         201: {
-          description: "New category created",
+          description: "New campaign created",
           content: {
             "application/json": {
               schema: {
@@ -115,6 +106,12 @@ const categoryDocs = {
                     type: "string",
                   },
                   titleAZ: {
+                    type: "string",
+                  },
+                  textEN: {
+                    type: "string",
+                  },
+                  textAZ: {
                     type: "string",
                   },
                   image: {
@@ -137,12 +134,12 @@ const categoryDocs = {
       },
     },
   },
-  "/api/v1/category/{id}": {
+  "/api/v1/campaign/{id}": {
     get: {
-      summary: "Get category by id",
+      summary: "Get campaign by id",
       security: [],
-      tags: ["Category"],
-      description: "Get category by id",
+      tags: ["Campaign"],
+      description: "Get campaign by id",
       parameters: [
         {
           in: "path",
@@ -155,7 +152,7 @@ const categoryDocs = {
       ],
       responses: {
         200: {
-          description: "Category by id",
+          description: "Campaign by id",
           content: {
             "application/json": {
               schema: {
@@ -170,6 +167,12 @@ const categoryDocs = {
                   titleAZ: {
                     type: "string",
                   },
+                  textEN: {
+                    type: "string",
+                  },
+                  textAZ: {
+                    type: "string",
+                  },
                   image: {
                     type: "string",
                   },
@@ -179,36 +182,13 @@ const categoryDocs = {
                   updatedAt: {
                     type: "string",
                   },
-                  subCategories: {
-                    type: "array",
-                    items: {
-                      type: "object",
-                      properties: {
-                        id: {
-                          type: "number",
-                        },
-                        titleEN: {
-                          type: "string",
-                        },
-                        titleAZ: {
-                          type: "string",
-                        },
-                        createdAt: {
-                          type: "string",
-                        },
-                        updatedAt: {
-                          type: "string",
-                        },
-                      },
-                    },
-                  },
                 },
               },
             },
           },
         },
         404: {
-          description: "Category not found",
+          description: "Campaign not found",
         },
         500: {
           description: "Some server error",
@@ -216,14 +196,14 @@ const categoryDocs = {
       },
     },
     put: {
-      summary: "Update category by id",
+      summary: "Update campaign by id",
       security: [
         {
           jwtAuth: [],
         },
       ],
-      tags: ["Category"],
-      description: "Update category by id",
+      tags: ["Campaign"],
+      description: "Update campaign by id",
       parameters: [
         {
           in: "path",
@@ -242,15 +222,23 @@ const categoryDocs = {
               properties: {
                 titleEN: {
                   type: "string",
-                  description: "Category title in English",
+                  description: "Campaign title in English",
                 },
                 titleAZ: {
                   type: "string",
-                  description: "Category title in Azerbaijani",
+                  description: "Campaign title in Azerbaijani",
+                },
+                textEN: {
+                  type: "string",
+                  description: "Campaign text in English",
+                },
+                textAZ: {
+                  type: "string",
+                  description: "Campaign text in Azerbaijani",
                 },
                 image: {
                   type: "file",
-                  description: "Category image",
+                  description: "Campaign image",
                 },
               },
             },
@@ -259,7 +247,7 @@ const categoryDocs = {
       },
       responses: {
         200: {
-          description: "Category updated",
+          description: "Campaign updated",
           content: {
             "application/json": {
               schema: {
@@ -272,6 +260,12 @@ const categoryDocs = {
                     type: "string",
                   },
                   titleAZ: {
+                    type: "string",
+                  },
+                  textEN: {
+                    type: "string",
+                  },
+                  textAZ: {
                     type: "string",
                   },
                   image: {
@@ -289,7 +283,7 @@ const categoryDocs = {
           },
         },
         404: {
-          description: "Category not found",
+          description: "Campaign not found",
         },
         500: {
           description: "Some server error",
@@ -297,14 +291,14 @@ const categoryDocs = {
       },
     },
     delete: {
-      summary: "Delete category by id",
+      summary: "Delete campaign by id",
       security: [
         {
           jwtAuth: [],
         },
       ],
-      tags: ["Category"],
-      description: "Delete category by id",
+      tags: ["Campaign"],
+      description: "Delete campaign by id",
       parameters: [
         {
           in: "path",
@@ -317,10 +311,10 @@ const categoryDocs = {
       ],
       responses: {
         204: {
-          description: "Category deleted",
+          description: "Campaign deleted",
         },
         404: {
-          description: "Category not found",
+          description: "Campaign not found",
         },
         500: {
           description: "Some server error",
@@ -328,82 +322,6 @@ const categoryDocs = {
       },
     },
   },
-  // "/api/v1/category/{id}/update-image": {
-  //   post: {
-  //     summary: "Update category image by id",
-  //     security: [
-  //       {
-  //         jwtAuth: [],
-  //       },
-  //     ],
-  //     tags: ["Category"],
-  //     description: "Update category image by id",
-  //     parameters: [
-  //       {
-  //         in: "path",
-  //         name: "id",
-  //         required: true,
-  //         schema: {
-  //           type: "number",
-  //         },
-  //       },
-  //     ],
-  //     requestBody: {
-  //       content: {
-  //         "multipart/form-data": {
-  //           schema: {
-  //             type: "object",
-  //             required: ["image"],
-  //             properties: {
-  //               image: {
-  //                 type: "file",
-  //                 description: "Category image",
-  //               },
-  //             },
-  //           },
-  //         },
-  //       },
-  //     },
-  //     responses: {
-  //       200: {
-  //         description: "Category image updated",
-  //         content: {
-  //           "application/json": {
-  //             schema: {
-  //               type: "object",
-  //               properties: {
-  //                 id: {
-  //                   type: "number",
-  //                 },
-  //                 titleEN: {
-  //                   type: "string",
-  //                 },
-  //                 titleAZ: {
-  //                   type: "string",
-  //                 },
-  //                 image: {
-  //                   type: "string",
-  //                 },
-  //                 createdAt: {
-  //                   type: "string",
-  //                 },
-  //                 updatedAt: {
-  //                   type: "string",
-  //                 },
-  //               },
-  //             },
-  //           },
-  //         },
-  //       },
-  //       404: {
-  //         description: "Category not found",
-  //       },
-  //       500: {
-  //         description: "Some server error",
-  //       },
-  //     },
-  //   },
-  // },
 };
 
-export default categoryDocs;
+export default campaigndocs;
