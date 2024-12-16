@@ -21,7 +21,7 @@ export const getCampaigns = catchAsyncErrors(async (req, res, next) => {
       campaignCount: campaigns.length,
     });
 
-    res.status(200).send(campaigns.sort((a, b) => b.updatedAt - a.updatedAt));
+    res.status(200).send(campaigns.sort((a, b) => b.createdAt - a.createdAt));
   } catch (error) {
     // Prisma xətası
     if (error instanceof PrismaClientKnownRequestError) {

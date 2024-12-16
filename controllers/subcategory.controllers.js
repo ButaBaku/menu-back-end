@@ -28,7 +28,7 @@ export const getSubcategories = catchAsyncErrors(async (req, res, next) => {
 
     res
       .status(200)
-      .send(subcategories.sort((a, b) => b.updatedAt - a.updatedAt));
+      .send(subcategories.sort((a, b) => b.createdAt - a.createdAt));
   } catch (error) {
     // Handle Prisma known request errors
     if (error instanceof PrismaClientKnownRequestError) {

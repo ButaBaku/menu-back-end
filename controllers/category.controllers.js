@@ -33,7 +33,7 @@ export const getCategories = catchAsyncErrors(async (req, res, next) => {
       categoryCount: categories.length,
     });
 
-    res.status(200).send(categories.sort((a, b) => b.updatedAt - a.updatedAt));
+    res.status(200).send(categories.sort((a, b) => b.createdAt - a.createdAt));
   } catch (error) {
     // Handle Prisma known request errors
     if (error instanceof PrismaClientKnownRequestError) {
