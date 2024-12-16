@@ -28,7 +28,7 @@ export const getProducts = catchAsyncErrors(async (req, res, next) => {
       productCount: products.length,
     });
 
-    res.status(200).send(products.sort((a, b) => b.createdAt - a.createdAt));
+    res.status(200).send(products.sort((a, b) => a.createdAt - b.createdAt));
   } catch (error) {
     // Handle Prisma known request errors
     if (error instanceof PrismaClientKnownRequestError) {
