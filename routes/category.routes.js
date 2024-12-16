@@ -6,10 +6,11 @@ import {
   createCategory,
   updateCategory,
   deleteCategory,
-  // updateCategoryImage,
 } from "../controllers/category.controllers.js";
 import upload from "../config/multer.config.js";
 import { PrismaClient } from "@prisma/client";
+
+import logger from "../config/winston.config.js";
 
 const router = express.Router();
 
@@ -33,6 +34,11 @@ router
   .get(getCategory)
   .put(
     isAuthendicatedUser,
+    (req, res, next) => {
+      req.folder = "categories";
+      next();
+    },
+    upload.single("image"),
     async (req, res, next) => {
       try {
         if (req.file?.filename) {

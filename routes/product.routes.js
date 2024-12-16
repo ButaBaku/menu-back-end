@@ -6,10 +6,11 @@ import {
   createProduct,
   deleteProduct,
   updateProduct,
-  // updateProductImage,
 } from "../controllers/product.controllers.js";
 import upload from "../config/multer.config.js";
 import { PrismaClient } from "@prisma/client";
+
+import logger from "../config/winston.config.js";
 
 const router = express.Router();
 

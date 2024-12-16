@@ -144,12 +144,7 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
     // Məlumatların alınması və fayl yolunun yaradılması
     const formData = req.body;
 
-    if (!req.file) {
-      logger.warn("Şəkil yüklənmədi", { url: req.originalUrl });
-      return next(new ErrorHandler("Şəkil tələb olunur", 400));
-    }
-
-    const imagePath = `http://${req.headers.host}/${req.file.filename}`;
+    const imagePath = `http://${req.headers.host}/${req.file?.filename}`;
 
     // Validasiyanın yoxlanılması
     const { error } = productSchema.safeParse({
@@ -172,7 +167,7 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
         descEN: formData.descEN,
         descAZ: formData.descAZ,
         price: Number(formData.price),
-        image: imagePath,
+        image: req?.file && imagePath,
         gram: formData.gram,
         isCombo: formData.isCombo === "true",
         ingridientsAZ: formData.ingridientsAZ,
