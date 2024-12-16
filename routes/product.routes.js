@@ -39,36 +39,33 @@ router
     },
     upload.single("image"),
     async (req, res, next) => {
-      if (req.file?.filename) {
-        await prisma.product
-          .update({
+      try {
+        if (req.file?.filename) {
+          await prisma.product.update({
             where: { id: parseInt(req.params.id) },
             data: {
               image: `http://${req.headers.host}/${req.file.filename}`,
             },
-          })
-          .catch((error) => {
-            logger.error("Error updating product", {
-              error: error.message,
-              categoryId: req.params.id,
-            });
-            return next(new ErrorHandler("Product not found", 404));
           });
+          logger.info("Şəkil uğurla yeniləndi", { productId: req.params.id });
+        }
+        next();
+      } catch (error) {
+        logger.error("Məhsul yenilənərkən xəta baş verdi", {
+          error: error.message,
+          productId: req.params.id,
+        });
+
+        if (error.code === "P2025") {
+          // Prisma-specific error when the record to update is not found
+          next(new ErrorHandler("Məhsul tapılmadı", 404));
+        } else {
+          next(new ErrorHandler("Məhsul yenilənərkən xəta baş verdi", 500));
+        }
       }
-      next();
     },
     updateProduct
   )
   .delete(isAuthendicatedUser, deleteProduct);
-
-// router.route("/:id/update-image").post(
-//   isAuthendicatedUser,
-//   (req, res, next) => {
-//     req.folder = "products";
-//     next();
-//   },
-//   upload.single("image"),
-//   updateProductImage
-// );
 
 export default router;

@@ -38,23 +38,32 @@ router
     },
     upload.single("image"),
     async (req, res, next) => {
-      if (req.file?.filename) {
-        await prisma.campaign
-          .update({
+      try {
+        if (req.file?.filename) {
+          await prisma.campaign.update({
             where: { id: parseInt(req.params.id) },
             data: {
               image: `http://${req.headers.host}/${req.file.filename}`,
             },
-          })
-          .catch((error) => {
-            logger.error("Error updating campaign", {
-              error: error.message,
-              campaignId: req.params.id,
-            });
-            return next(new ErrorHandler("Campaign not found", 404));
           });
+          logger.info("Şəkil uğurla yeniləndi", { campaignId: req.params.id });
+        }
+        next();
+      } catch (error) {
+        logger.error("Kampaniya yenilənərkən xəta baş verdi", {
+          error: error.message,
+          campaignId: req.params.id,
+        });
+
+        if (error.code === "P2025") {
+          // Prisma-specific error when the record to update is not found
+          return next(new ErrorHandler("Kampaniya tapılmadı", 404));
+        } else {
+          return next(
+            new ErrorHandler("Kampaniya yenilənərkən xəta baş verdi", 500)
+          );
+        }
       }
-      next();
     },
     updateCampaign
   )

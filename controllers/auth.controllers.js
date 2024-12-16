@@ -10,87 +10,116 @@ const prisma = new PrismaClient();
 
 //! Register
 export const registerUser = catchAsyncErrors(async (req, res, next) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  logger.info("Attempt to register user", { email });
+    logger.info("İstifadəçi qeydiyyatdan keçməyə çalışır", { email });
 
-  // Validate user input
-  const { error } = userSchema.safeParse({ email, password });
-  if (error) {
-    logger.warn("Validation error", {
-      email,
-      message: error.errors[0].message,
-    });
-    return next(new ErrorHandler(error.errors[0].message, 400));
-  }
+    // 1. Validate user input
+    const { error } = userSchema.safeParse({ email, password });
+    if (error) {
+      const errorMessage =
+        error.errors[0].message || "Daxil edilən məlumatda səhv var";
+      logger.warn("Doğrulama xətası", {
+        email,
+        message: errorMessage,
+      });
+      return next(new ErrorHandler(errorMessage, 400));
+    }
 
-  const hashedPassword = await bcrypt.hash(password, 8);
+    // 2. Hash the password
+    const hashedPassword = await bcrypt.hash(password, 8);
 
-  await prisma.user
-    .create({
+    // 3. Create a new user in the database
+    await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
       },
-    })
-    .then(() => {
-      logger.info("User registered successfully", { email });
-    })
-    .catch((error) => {
-      logger.error("Failed to register user", { email, error: error.message });
-      return next(new ErrorHandler("This user already exists", 400));
     });
 
-  res.status(201).send({
-    message: "User registered successfully",
-  });
+    logger.info("İstifadəçi uğurla qeydiyyatdan keçdi", { email });
+    res.status(201).send({
+      message: "İstifadəçi uğurla qeydiyyatdan keçdi",
+    });
+  } catch (error) {
+    // Handle Prisma "unique constraint" error
+    if (
+      error instanceof PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      logger.warn("Qeydiyyat uğursuz oldu - İstifadəçi artıq mövcuddur", {
+        email,
+      });
+      return next(new ErrorHandler("Bu istifadəçi artıq mövcuddur", 400));
+    }
+
+    // Handle any other unexpected error
+    logger.error("Gözlənilməz xəta baş verdi", {
+      message: error.message,
+      stack: error.stack,
+    });
+    return next(
+      new ErrorHandler(
+        "Xidmət müvəqqəti əlçatmazdır, bir az sonra yenidən cəhd edin",
+        500
+      )
+    );
+  }
 });
 
 //! Login
 export const loginUser = catchAsyncErrors(async (req, res, next) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  logger.info("Attempt to login user", { email });
+    logger.info("İstifadəçi daxil olmağa çalışır", { email });
 
-  // Validate user input
-  const { error } = userSchema.safeParse({ email, password });
-  if (error) {
-    logger.warn("Validation error", {
-      email,
-      message: error.errors[0].message,
-    });
-    return next(new ErrorHandler(error.errors[0].message, 400));
-  }
-
-  const user = await prisma.user
-    .findUnique({
-      where: { email },
-    })
-    .catch((error) => {
-      logger.error("Error while fetching user", {
+    // 1. Validate user input
+    const { error } = userSchema.safeParse({ email, password });
+    if (error) {
+      const errorMessage = error.errors[0].message || "Məlumatda səhv var";
+      logger.warn("Doğrulama xətası", {
         email,
-        error: error.message,
+        message: errorMessage,
       });
-      return next(new ErrorHandler("Invalid credentials", 401));
+      return next(new ErrorHandler(errorMessage, 400));
+    }
+
+    // 2. Find user in database
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      logger.warn("Daxil olma uğursuz oldu - İstifadəçi tapılmadı", { email });
+      return next(new ErrorHandler("İstifadəçi adı və ya şifrə səhvdir", 401));
+    }
+
+    // 3. Check if password is correct
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      logger.warn("Daxil olma uğursuz oldu - Yanlış şifrə", { email });
+      return next(new ErrorHandler("İstifadəçi adı və ya şifrə səhvdir", 401));
+    }
+
+    // 4. Generate JWT token
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "24h" }
+    );
+
+    logger.info("İstifadəçi uğurla daxil oldu", { email });
+    res.status(200).send({ accessToken: token });
+  } catch (error) {
+    logger.error("Gözlənilməz xəta baş verdi", {
+      message: error.message,
+      stack: error.stack,
     });
-
-  if (!user) {
-    logger.warn("Login failed - User not found", { email });
-    return next(new ErrorHandler("Invalid credentials", 401));
+    return next(
+      new ErrorHandler(
+        "Xidmət müvəqqəti əlçatmazdır, bir az sonra yenidən cəhd edin",
+        500
+      )
+    );
   }
-
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) {
-    logger.warn("Login failed - Incorrect password", { email });
-    return next(new ErrorHandler("Invalid credentials", 401));
-  }
-
-  const token = jwt.sign(
-    { id: user.id, email: user.email },
-    process.env.JWT_SECRET_KEY,
-    { expiresIn: "24h" }
-  );
-
-  logger.info("User logged in successfully", { email });
-  res.status(200).send({ accessToken: token });
 });

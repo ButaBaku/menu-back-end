@@ -33,42 +33,36 @@ router
   .get(getCategory)
   .put(
     isAuthendicatedUser,
-    (req, res, next) => {
-      req.folder = "categories";
-      next();
-    },
-    upload.single("image"),
     async (req, res, next) => {
-      if (req.file?.filename) {
-        await prisma.category
-          .update({
+      try {
+        if (req.file?.filename) {
+          await prisma.category.update({
             where: { id: parseInt(req.params.id) },
             data: {
               image: `http://${req.headers.host}/${req.file.filename}`,
             },
-          })
-          .catch((error) => {
-            logger.error("Error updating category", {
-              error: error.message,
-              categoryId: req.params.id,
-            });
-            return next(new ErrorHandler("Category not found", 404));
           });
+          logger.info("Şəkil uğurla yeniləndi", { categoryId: req.params.id });
+        }
+        next();
+      } catch (error) {
+        logger.error("Kateqoriya yenilənərkən xəta baş verdi", {
+          error: error.message,
+          categoryId: req.params.id,
+        });
+
+        if (error.code === "P2025") {
+          // Prisma-specific error when the record to update is not found
+          return next(new ErrorHandler("Kateqoriya tapılmadı", 404));
+        } else {
+          return next(
+            new ErrorHandler("Kateqoriya yenilənərkən xəta baş verdi", 500)
+          );
+        }
       }
-      next();
     },
     updateCategory
   )
   .delete(isAuthendicatedUser, deleteCategory);
-
-// router.route("/:id/update-image").post(
-//   isAuthendicatedUser,
-//   (req, res, next) => {
-//     req.folder = "categories";
-//     next();
-//   },
-//   upload.single("image"),
-//   updateCategoryImage
-// );
 
 export default router;

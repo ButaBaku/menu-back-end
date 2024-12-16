@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  logger.info(`Incoming Request: ${req.method} ${req.url}`);
+  logger.info(`Gələn sorğu: ${req.method} ${req.url}`);
   next();
 });
 
@@ -40,16 +40,16 @@ app.use("/api/v1/campaign", campaignRouter);
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
-// catch 404 and forward to error handler
+// 404 xətasını tut və xəta idarəedicisinə ötür
 app.use(function (req, res, next) {
-  next(new ErrorHandler(`Not found - ${req.originalUrl}`, 404));
+  next(new ErrorHandler(`Tapılmadı - ${req.originalUrl}`, 404));
 });
 
-// error handler
+// xəta idarəedicisi
 app.use(function (err, req, res, next) {
-  logger.error(`Error occurred(${err.statusCode}): ${err.message}`);
+  logger.error(`Xəta baş verdi (${err.statusCode}): ${err.message}`);
   res.status(err.statusCode || 500).send({
-    error: err.message || "Internal server error",
+    error: err.message || "Daxili server xətası",
   });
 });
 

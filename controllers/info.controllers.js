@@ -7,36 +7,48 @@ const prisma = new PrismaClient();
 
 // Get info
 export const getInfo = catchAsyncErrors(async (req, res, next) => {
-  logger.info("Getting info", {
+  logger.info("Məlumatın alınması başladı", {
     method: req.method,
     url: req.originalUrl,
   });
 
-  const info = await prisma.info.findUnique({
-    where: { id: 1 },
-  });
+  try {
+    const info = await prisma.info.findUnique({
+      where: { id: 1 },
+    });
 
-  if (!info) {
-    logger.error("Info not found", { infoId: req.params.id });
-    return next(new ErrorHandler("Info not found", 404));
+    if (!info) {
+      logger.warn("Məlumat tapılmadı", { infoId: 1 });
+      return next(new ErrorHandler("Məlumat tapılmadı", 404));
+    }
+
+    logger.info("Məlumat uğurla tapıldı");
+    res.status(200).send(info);
+  } catch (error) {
+    logger.error("Məlumat alınarkən gözlənilməz xəta baş verdi", {
+      message: error.message,
+      stack: error.stack,
+    });
+    next(
+      new ErrorHandler(
+        "Xidmət müvəqqəti əlçatmazdır, bir az sonra yenidən cəhd edin",
+        500
+      )
+    );
   }
-
-  logger.info("Info found successfully");
-  res.status(200).send(info);
 });
 
-// Update category
 export const updateInfo = catchAsyncErrors(async (req, res, next) => {
-  logger.info("Updating info", {
+  logger.info("Məlumatın yenilənməsi başladı", {
     method: req.method,
     url: req.originalUrl,
     body: req.body,
   });
 
-  const formData = req.body;
+  try {
+    const formData = req.body;
 
-  const category = await prisma.info
-    .update({
+    const updatedInfo = await prisma.info.update({
       where: { id: 1 },
       data: {
         titleEN: formData.titleEN,
@@ -49,15 +61,37 @@ export const updateInfo = catchAsyncErrors(async (req, res, next) => {
         facebook: formData.facebook,
         whatsapp: formData.whatsapp,
       },
-    })
-    .catch((error) => {
-      logger.error("Error updating info", {
-        error: error.message,
-        categoryId: req.params.id,
-      });
-      return next(new ErrorHandler("Info not found", 404));
     });
 
-  logger.info("Info updated successfully");
-  res.status(200).send(category);
+    if (!updatedInfo) {
+      logger.warn("Yenilənəcək məlumat tapılmadı", { infoId: 1 });
+      return next(new ErrorHandler("Yenilənəcək məlumat tapılmadı", 404));
+    }
+
+    logger.info("Məlumat uğurla yeniləndi", { infoId: 1 });
+    res.status(200).send(updatedInfo);
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      logger.error("Prisma xətası baş verdi", {
+        errorCode: error.code,
+        message: error.message,
+      });
+
+      // P2025 xətası - Record not found
+      if (error.code === "P2025") {
+        return next(new ErrorHandler("Yenilənəcək məlumat tapılmadı", 404));
+      }
+    }
+
+    logger.error("Məlumat yenilənərkən gözlənilməz xəta baş verdi", {
+      message: error.message,
+      stack: error.stack,
+    });
+    next(
+      new ErrorHandler(
+        "Xidmət müvəqqəti əlçatmazdır, bir az sonra yenidən cəhd edin",
+        500
+      )
+    );
+  }
 });

@@ -24,35 +24,49 @@ router
       { name: "backgroundImage", maxCount: 1 },
     ]),
     async (req, res, next) => {
-      if (req.files?.logo || req.files?.backgroundImage) {
-        const data = req.files.logo
-          ? {
-              logo: `http://${req.headers.host}/${
-                req.files?.logo?.at(0).filename
-              }`,
-            }
-          : {};
+      try {
+        if (req.files?.logo || req.files?.backgroundImage) {
+          const data = req.files.logo
+            ? {
+                logo: `http://${req.headers.host}/${
+                  req.files?.logo?.at(0).filename
+                }`,
+              }
+            : {};
 
-        if (req.files.backgroundImage) {
-          data.backgroundImage = `http://${req.headers.host}/${
-            req.files?.backgroundImage?.at(0).filename
-          }`;
-        }
+          if (req.files.backgroundImage) {
+            data.backgroundImage = `http://${req.headers.host}/${
+              req.files?.backgroundImage?.at(0).filename
+            }`;
+          }
 
-        await prisma.info
-          .update({
-            where: { id: 1 },
-            data,
-          })
-          .catch((error) => {
-            logger.error("Error updating info", {
-              error: error.message,
-              categoryId: req.params.id,
+          await prisma.info
+            .update({
+              where: { id: 1 },
+              data,
+            })
+            .catch((error) => {
+              logger.error("Məlumat yenilənərkən xəta baş verdi", {
+                error: error.message,
+                infoId: 1,
+              });
+              if (error.code === "P2025") {
+                return next(new ErrorHandler("Məlumat tapılmadı", 404));
+              }
+              return next(
+                new ErrorHandler("Məlumat yenilənərkən xəta baş verdi", 500)
+              );
             });
-            return next(new ErrorHandler("Info not found", 404));
-          });
+
+          logger.info("Məlumat uğurla yeniləndi");
+        }
+        next();
+      } catch (error) {
+        logger.error("Şəkil yüklənərkən xəta baş verdi", {
+          error: error.message,
+        });
+        return next(new ErrorHandler("Şəkil yüklənərkən xəta baş verdi", 500));
       }
-      next();
     },
     updateInfo
   );

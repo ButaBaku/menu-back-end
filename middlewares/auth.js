@@ -7,10 +7,15 @@ export const isAuthendicatedUser = catchAsyncErrors(async (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token)
-    return next(new ErrorHandler("Access denied. No token provided", 401));
+    return next(
+      new ErrorHandler("Giriş qadağandır. Token təqdim edilməyib", 401)
+    );
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
-    if (err) return next(new ErrorHandler("Invalid or expired token", 403));
+    if (err)
+      return next(
+        new ErrorHandler("Etibarsız və ya müddəti bitmiş token", 403)
+      );
     req.user = user;
     next();
   });
