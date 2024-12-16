@@ -43,7 +43,7 @@ model Product {
   descEN String?
   descAZ String?
   gram String?
-  price     Float
+  price     String
   ingridientsAZ String[]
   ingridientsEN String[]
   isCombo Boolean @default(false)

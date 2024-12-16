@@ -149,7 +149,7 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
     const { error } = productSchema.safeParse({
       titleEN: formData.titleEN,
       titleAZ: formData.titleAZ,
-      price: formData.price && Number(formData.price),
+      price: formData.price,
       subCategoryId: formData.subCategoryId && Number(formData.subCategoryId),
     });
 
@@ -165,7 +165,7 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
         titleAZ: formData.titleAZ,
         descEN: formData.descEN,
         descAZ: formData.descAZ,
-        price: Number(formData.price),
+        price: formData.price,
         image: req?.file && imagePath,
         gram: formData.gram,
         isCombo: formData.isCombo === "true",
@@ -247,9 +247,9 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
         titleAZ: data.titleAZ,
         descEN: data.descEN,
         descAZ: data.descAZ,
-        price: data.price ? Number(data.price) : undefined,
+        price: data.price,
         gram: data.gram,
-        isCombo: data.isCombo,
+        isCombo: data.isCombo === "true",
         ingridientsAZ: data.ingridientsAZ,
         ingridientsEN: data.ingridientsEN,
         subCategoryId: data.subCategoryId
