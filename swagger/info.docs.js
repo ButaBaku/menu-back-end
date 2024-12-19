@@ -52,6 +52,12 @@ const infoDocs = {
                   whatsapp: {
                     type: "string",
                   },
+                  tiktok: {
+                    type: "string",
+                  },
+                  youtube: {
+                    type: "string",
+                  },
                 },
               },
             },
@@ -116,6 +122,12 @@ const infoDocs = {
                 whatsapp: {
                   type: "string",
                 },
+                tiktok: {
+                  type: "string",
+                },
+                youtube: {
+                  type: "string",
+                },
               },
             },
           },
@@ -167,6 +179,12 @@ const infoDocs = {
                     type: "string",
                   },
                   whatsapp: {
+                    type: "string",
+                  },
+                  tiktok: {
+                    type: "string",
+                  },
+                  youtube: {
                     type: "string",
                   },
                 },

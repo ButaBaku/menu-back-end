@@ -66,6 +66,8 @@ model Info {
   instagram String?
   facebook String?
   whatsapp String?
+  tiktok String?
+  youtube String?
 }
 
 model Campaign {

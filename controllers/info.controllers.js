@@ -2,6 +2,7 @@ import catchAsyncErrors from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import { PrismaClient } from "@prisma/client";
 import logger from "../config/winston.config.js";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 const prisma = new PrismaClient();
 
@@ -60,6 +61,8 @@ export const updateInfo = catchAsyncErrors(async (req, res, next) => {
         instagram: formData.instagram,
         facebook: formData.facebook,
         whatsapp: formData.whatsapp,
+        youtube: formData.youtube,
+        tiktok: formData.tiktok,
       },
     });
 
