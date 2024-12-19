@@ -4,8 +4,11 @@ import { PrismaClient } from "@prisma/client";
 import { categorySchema } from "../lib/validations.js";
 import logger from "../config/winston.config.js";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import fs from "fs";
+import path from "path";
 
 const prisma = new PrismaClient();
+const __dirname = path.resolve("public/");
 
 // Get all categories
 export const getCategories = catchAsyncErrors(async (req, res, next) => {
@@ -303,8 +306,29 @@ export const deleteCategory = catchAsyncErrors(async (req, res, next) => {
     }
 
     // Kateqoriyanın silinməsi
-    await prisma.category.delete({
+    const category = await prisma.category.delete({
       where: { id: categoryId },
+      include: {
+        subCategories: {
+          include: {
+            products: true,
+          },
+        },
+      },
+    });
+
+    if (category.image) {
+      const filePath = decodeURIComponent(new URL(category.image).pathname);
+      fs.unlinkSync(path.join(__dirname, filePath));
+    }
+
+    category.subCategories.forEach((subcategory) => {
+      subcategory.products.forEach(async (product) => {
+        if (product.image) {
+          const filePath = decodeURIComponent(new URL(product.image).pathname);
+          fs.unlinkSync(path.join(__dirname, filePath));
+        }
+      });
     });
 
     logger.info("Kateqoriya uğurla silindi", { categoryId: req.params.id });

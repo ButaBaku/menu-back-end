@@ -4,8 +4,12 @@ import { PrismaClient } from "@prisma/client";
 import { productSchema } from "../lib/validations.js";
 import logger from "../config/winston.config.js";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import fs from "fs";
+import path from "path";
 
 const prisma = new PrismaClient();
+const __dirname = path.resolve("public/");
+
 // Get all products
 export const getProducts = catchAsyncErrors(async (req, res, next) => {
   try {
@@ -315,11 +319,16 @@ export const deleteProduct = catchAsyncErrors(async (req, res, next) => {
     }
 
     // Məhsulun silinməsi
-    await prisma.product.delete({
+    const product = await prisma.product.delete({
       where: {
         id: productId,
       },
     });
+
+    if (product.image) {
+      const filePath = decodeURIComponent(new URL(product.image).pathname);
+      fs.unlinkSync(path.join(__dirname, filePath));
+    }
 
     logger.info("Məhsul uğurla silindi", { productId: req.params.id });
     res.status(204).send();

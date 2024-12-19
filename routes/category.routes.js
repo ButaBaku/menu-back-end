@@ -9,12 +9,15 @@ import {
 } from "../controllers/category.controllers.js";
 import upload from "../config/multer.config.js";
 import { PrismaClient } from "@prisma/client";
+import fs from "fs";
+import path from "path";
 
 import logger from "../config/winston.config.js";
 
 const router = express.Router();
 
 const prisma = new PrismaClient();
+const __dirname = path.resolve("public/");
 
 router
   .route("/")
@@ -42,12 +45,24 @@ router
     async (req, res, next) => {
       try {
         if (req.file?.filename) {
+          const category = await prisma.category.findUnique({
+            where: { id: parseInt(req.params.id) },
+          });
+
+          if (category.image) {
+            const filePath = decodeURIComponent(
+              new URL(category.image).pathname
+            );
+            fs.unlinkSync(path.join(__dirname, filePath));
+          }
+
           await prisma.category.update({
             where: { id: parseInt(req.params.id) },
             data: {
               image: `http://${req.headers.host}/${req.file.filename}`,
             },
           });
+
           logger.info("Şəkil uğurla yeniləndi", { categoryId: req.params.id });
         }
         next();

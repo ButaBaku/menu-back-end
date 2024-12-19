@@ -4,8 +4,11 @@ import { PrismaClient } from "@prisma/client";
 import { campaignSchema } from "../lib/validations.js";
 import logger from "../config/winston.config.js";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import fs from "fs";
+import path from "path";
 
 const prisma = new PrismaClient();
+const __dirname = path.resolve("public/");
 
 export const getCampaigns = catchAsyncErrors(async (req, res, next) => {
   logger.info("Bütün kampaniyaların gətirilməsi", {
@@ -289,6 +292,11 @@ export const deleteCampaign = catchAsyncErrors(async (req, res, next) => {
     if (!campaign) {
       logger.warn("Kampaniya tapılmadı", { campaignId });
       return next(new ErrorHandler("Kampaniya tapılmadı", 404));
+    }
+
+    if (campaign.image) {
+      const filePath = decodeURIComponent(new URL(campaign.image).pathname);
+      fs.unlinkSync(path.join(__dirname, filePath));
     }
 
     logger.info("Kampaniya uğurla silindi", { campaignId });

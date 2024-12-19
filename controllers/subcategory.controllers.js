@@ -4,8 +4,11 @@ import { PrismaClient } from "@prisma/client";
 import { subCategorySchema } from "../lib/validations.js";
 import logger from "../config/winston.config.js";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import fs from "fs";
+import path from "path";
 
 const prisma = new PrismaClient();
+const __dirname = path.resolve("public/");
 
 // Get all subcategories
 export const getSubcategories = catchAsyncErrors(async (req, res, next) => {
@@ -306,10 +309,20 @@ export const deleteSubcategory = catchAsyncErrors(async (req, res, next) => {
     }
 
     // Alt kateqoriyanın silinməsi
-    await prisma.subCategory.delete({
+    const subcategory = await prisma.subCategory.delete({
       where: {
         id: subcategoryId,
       },
+      include: {
+        products: true,
+      },
+    });
+
+    subcategory.products.forEach(async (product) => {
+      if (product.image) {
+        const filePath = decodeURIComponent(new URL(product.image).pathname);
+        fs.unlinkSync(path.join(__dirname, filePath));
+      }
     });
 
     logger.info("Alt kateqoriya uğurla silindi", {

@@ -5,10 +5,13 @@ import upload from "../config/multer.config.js";
 import { PrismaClient } from "@prisma/client";
 import logger from "../config/winston.config.js";
 import ErrorHandler from "../utils/errorHandler.js";
+import fs from "fs";
+import path from "path";
 
 const router = express.Router();
 
 const prisma = new PrismaClient();
+const __dirname = path.resolve("public/");
 
 router
   .route("/")
@@ -38,6 +41,22 @@ router
             data.backgroundImage = `http://${req.headers.host}/${
               req.files?.backgroundImage?.at(0).filename
             }`;
+          }
+
+          const info = await prisma.info.findUnique({
+            where: { id: 1 },
+          });
+
+          if (info.logo && req.files.logo) {
+            const filePath = decodeURIComponent(new URL(info.logo).pathname);
+            fs.unlinkSync(path.join(__dirname, filePath));
+          }
+
+          if (info.backgroundImage && req.files.backgroundImage) {
+            const filePath = decodeURIComponent(
+              new URL(info.backgroundImage).pathname
+            );
+            fs.unlinkSync(path.join(__dirname, filePath));
           }
 
           await prisma.info
