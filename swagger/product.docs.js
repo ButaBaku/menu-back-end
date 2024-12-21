@@ -51,6 +51,7 @@ const productDocs = {
                     isCombo: { type: "boolean" },
                     image: { type: "string" },
                     subCategoryId: { type: "number" },
+                    position: { type: "number" },
                     createdAt: { type: "string" },
                     updatedAt: { type: "string" },
 
@@ -69,6 +70,7 @@ const productDocs = {
                         categoryId: {
                           type: "number",
                         },
+                        position: { type: "number" },
                         createdAt: {
                           type: "string",
                         },
@@ -90,6 +92,7 @@ const productDocs = {
                             image: {
                               type: "string",
                             },
+                            position: { type: "number" },
                             createdAt: {
                               type: "string",
                             },
@@ -125,7 +128,13 @@ const productDocs = {
           "multipart/form-data": {
             schema: {
               type: "object",
-              required: ["titleEN", "titleAZ", "price", "subCategoryId"],
+              required: [
+                "titleEN",
+                "titleAZ",
+                "price",
+                "position",
+                "subCategoryId",
+              ],
               properties: {
                 titleEN: {
                   type: "string",
@@ -173,6 +182,7 @@ const productDocs = {
                   },
                   description: "Ingridients in English",
                 },
+                position: { type: "number" },
                 subCategoryId: {
                   type: "number",
                   description: "Sub category id",
@@ -226,6 +236,7 @@ const productDocs = {
                   isCombo: { type: "boolean" },
                   image: { type: "string" },
                   subCategoryId: { type: "number" },
+                  position: { type: "number" },
                   createdAt: {
                     type: "string",
                   },
@@ -303,6 +314,7 @@ const productDocs = {
                   isCombo: { type: "boolean" },
                   image: { type: "string" },
                   subCategoryId: { type: "number" },
+                  position: { type: "number" },
                   createdAt: { type: "string" },
                   updatedAt: { type: "string" },
 
@@ -321,6 +333,7 @@ const productDocs = {
                       categoryId: {
                         type: "number",
                       },
+                      position: { type: "number" },
                       createdAt: {
                         type: "string",
                       },
@@ -342,6 +355,7 @@ const productDocs = {
                           image: {
                             type: "string",
                           },
+                          position: { type: "number" },
                           createdAt: {
                             type: "string",
                           },
@@ -436,6 +450,10 @@ const productDocs = {
                   },
                   description: "Ingridients in English",
                 },
+                position: {
+                  type: "number",
+                  description: "Product position",
+                },
                 subCategoryId: {
                   type: "number",
                   description: "Sub category id",
@@ -489,6 +507,7 @@ const productDocs = {
                   isCombo: { type: "boolean" },
                   image: { type: "string" },
                   subCategoryId: { type: "number" },
+                  position: { type: "number" },
                   createdAt: { type: "string" },
                   updatedAt: { type: "string" },
 
@@ -507,6 +526,7 @@ const productDocs = {
                       categoryId: {
                         type: "number",
                       },
+                      position: { type: "number" },
                       createdAt: {
                         type: "string",
                       },
@@ -528,6 +548,7 @@ const productDocs = {
                           image: {
                             type: "string",
                           },
+                          position: { type: "number" },
                           createdAt: {
                             type: "string",
                           },

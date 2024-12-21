@@ -32,7 +32,7 @@ export const getProducts = catchAsyncErrors(async (req, res, next) => {
       productCount: products.length,
     });
 
-    res.status(200).send(products.sort((a, b) => a.createdAt - b.createdAt));
+    res.status(200).send(products.sort((a, b) => a.position - b.position));
   } catch (error) {
     // Handle Prisma known request errors
     if (error instanceof PrismaClientKnownRequestError) {
@@ -154,6 +154,7 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
       titleEN: formData.titleEN,
       titleAZ: formData.titleAZ,
       price: formData.price,
+      position: formData.position && Number(formData.position),
       subCategoryId: formData.subCategoryId && Number(formData.subCategoryId),
     });
 
@@ -175,6 +176,7 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
         isCombo: formData.isCombo === "true",
         ingridientsAZ: formData.ingridientsAZ,
         ingridientsEN: formData.ingridientsEN,
+        position: Number(formData.position),
         subCategoryId: Number(formData.subCategoryId),
       },
     });
@@ -232,6 +234,9 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
   try {
     const data = req.body;
 
+    console.log(Boolean(data.isCombo));
+    console.log(typeof Boolean(data.isCombo));
+
     const productId = parseInt(req.params.id);
 
     if (isNaN(productId)) {
@@ -253,10 +258,11 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
         descAZ: data.descAZ,
         price: data.price,
         gram: data.gram,
-        isCombo: data.isCombo === "true",
+        isCombo: data.isCombo ? data.isCombo === "true" : undefined,
         ingridientsAZ: data.ingridientsAZ,
         ingridientsEN: data.ingridientsEN,
-        subCategoryId: data.subCategoryId
+        position: Number(data.position) ? Number(data.position) : undefined,
+        subCategoryId: Number(data.subCategoryId)
           ? Number(data.subCategoryId)
           : undefined,
       },

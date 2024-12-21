@@ -27,6 +27,9 @@ const subCategoryDocs = {
                     categoryId: {
                       type: "number",
                     },
+                    position: {
+                      type: "number",
+                    },
                     createdAt: {
                       type: "string",
                     },
@@ -47,6 +50,9 @@ const subCategoryDocs = {
                         },
                         image: {
                           type: "string",
+                        },
+                        position: {
+                          type: "number",
                         },
                         createdAt: {
                           type: "string",
@@ -83,6 +89,9 @@ const subCategoryDocs = {
                           isCombo: { type: "boolean" },
                           image: { type: "string" },
                           subCategoryId: { type: "number" },
+                          position: {
+                            type: "number",
+                          },
                           createdAt: { type: "string" },
                           updatedAt: { type: "string" },
                         },
@@ -123,6 +132,10 @@ const subCategoryDocs = {
                   type: "string",
                   description: "Subcategory title in Azerbaijani",
                 },
+                position: {
+                  type: "number",
+                  description: "Subcategory position",
+                },
                 categoryId: {
                   type: "number",
                   description: "Category id",
@@ -150,6 +163,9 @@ const subCategoryDocs = {
                     type: "string",
                   },
                   categoryId: {
+                    type: "number",
+                  },
+                  position: {
                     type: "number",
                   },
                   createdAt: {
@@ -205,6 +221,9 @@ const subCategoryDocs = {
                   categoryId: {
                     type: "number",
                   },
+                  position: {
+                    type: "number",
+                  },
                   createdAt: {
                     type: "string",
                   },
@@ -225,6 +244,9 @@ const subCategoryDocs = {
                       },
                       image: {
                         type: "string",
+                      },
+                      position: {
+                        type: "number",
                       },
                       createdAt: {
                         type: "string",
@@ -261,6 +283,9 @@ const subCategoryDocs = {
                         isCombo: { type: "boolean" },
                         image: { type: "string" },
                         subCategoryId: { type: "number" },
+                        position: {
+                          type: "number",
+                        },
                         createdAt: { type: "string" },
                         updatedAt: { type: "string" },
                       },
@@ -312,6 +337,9 @@ const subCategoryDocs = {
                   type: "string",
                   description: "Subcategory title in Azerbaijani",
                 },
+                position: {
+                  type: "number",
+                },
                 categoryId: {
                   type: "number",
                   description: "Category id",
@@ -340,6 +368,9 @@ const subCategoryDocs = {
                   },
                   image: {
                     type: "string",
+                  },
+                  position: {
+                    type: "number",
                   },
                   createdAt: {
                     type: "string",

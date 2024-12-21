@@ -29,9 +29,7 @@ export const getSubcategories = catchAsyncErrors(async (req, res, next) => {
       subcategoryCount: subcategories.length,
     });
 
-    res
-      .status(200)
-      .send(subcategories.sort((a, b) => a.createdAt - b.createdAt));
+    res.status(200).send(subcategories.sort((a, b) => a.position - b.position));
   } catch (error) {
     // Handle Prisma known request errors
     if (error instanceof PrismaClientKnownRequestError) {
@@ -147,13 +145,14 @@ export const createSubcategory = catchAsyncErrors(async (req, res, next) => {
     body: req.body,
   });
 
-  const { titleEN, titleAZ, categoryId } = req.body;
+  const { titleEN, titleAZ, position, categoryId } = req.body;
 
   // Validate user input
   const { error } = subCategorySchema.safeParse({
-    titleEN: titleEN,
-    titleAZ: titleAZ,
-    categoryId: categoryId,
+    titleEN,
+    titleAZ,
+    position,
+    categoryId,
   });
 
   if (error) {
@@ -168,6 +167,7 @@ export const createSubcategory = catchAsyncErrors(async (req, res, next) => {
       data: {
         titleEN,
         titleAZ,
+        position,
         categoryId,
       },
     });
@@ -185,15 +185,18 @@ export const createSubcategory = catchAsyncErrors(async (req, res, next) => {
       });
 
       // Prisma Error: P2002 - Unique constraint failed
-      if (error.code === "P2002") {
+      if (
+        error.code === "P2002" &&
+        (error.meta.target[0] === "titleEN" ||
+          error.meta.target[0] === "titleAZ")
+      ) {
         return next(
-          new ErrorHandler("Bu başlıqla artıq alt kateqoriya mövcuddur", 400)
+          new ErrorHandler("Bu başlıqla artıq alt kateqoriya mövcuddur", 409)
         );
       }
 
-      // Prisma Error: P2025 - Record not found (for foreign key issues)
-      if (error.code === "P2025") {
-        return next(new ErrorHandler("Müvafiq kateqoriya tapılmadı", 404));
+      if (error.code === "P2002" && error.meta.target[0] === "position") {
+        return next(new ErrorHandler("Bu pozisiya artıq doludur", 409));
       }
 
       // Handle other Prisma errors
@@ -228,7 +231,7 @@ export const updateSubcategory = catchAsyncErrors(async (req, res, next) => {
     body: req.body,
   });
 
-  const { titleEN, titleAZ, categoryId } = req.body;
+  const { titleEN, titleAZ, categoryId, position } = req.body;
 
   try {
     const subcategoryId = parseInt(req.params.id);
@@ -250,7 +253,8 @@ export const updateSubcategory = catchAsyncErrors(async (req, res, next) => {
       data: {
         titleEN,
         titleAZ,
-        categoryId,
+        position: Number(position) ? Number(position) : undefined,
+        categoryId: Number(categoryId) ? Number(categoryId) : undefined,
       },
     });
 
@@ -265,6 +269,20 @@ export const updateSubcategory = catchAsyncErrors(async (req, res, next) => {
         message: error.message,
         subcategoryId: req.params.id,
       });
+
+      if (
+        error.code === "P2002" &&
+        (error.meta.target[0] === "titleEN" ||
+          error.meta.target[0] === "titleAZ")
+      ) {
+        return next(
+          new ErrorHandler("Bu başlıqla artıq alt kateqoriya mövcuddur", 409)
+        );
+      }
+
+      if (error.code === "P2002" && error.meta.target[0] === "position") {
+        return next(new ErrorHandler("Bu pozisiya artıq doludur", 409));
+      }
 
       // P2025 xətası - Record Not Found
       if (error.code === "P2025") {

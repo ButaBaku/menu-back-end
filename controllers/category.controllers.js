@@ -167,6 +167,7 @@ export const createCategory = catchAsyncErrors(async (req, res, next) => {
     const { error } = categorySchema.safeParse({
       titleEN: formData.titleEN,
       titleAZ: formData.titleAZ,
+      position: formData.position && Number(formData.position),
     });
 
     if (error) {
@@ -179,6 +180,7 @@ export const createCategory = catchAsyncErrors(async (req, res, next) => {
       data: {
         titleEN: formData.titleEN,
         titleAZ: formData.titleAZ,
+        position: Number(formData.position),
         image: imagePath,
       },
     });
@@ -192,8 +194,16 @@ export const createCategory = catchAsyncErrors(async (req, res, next) => {
         message: error.message,
       });
 
-      if (error.code === "P2002") {
+      if (
+        error.code === "P2002" &&
+        (error.meta.target[0] === "titleEN" ||
+          error.meta.target[0] === "titleAZ")
+      ) {
         return next(new ErrorHandler("Bu başlıq artıq mövcuddur", 409));
+      }
+
+      if (error.code === "P2002" && error.meta.target[0] === "position") {
+        return next(new ErrorHandler("Bu pozisiya artıq doludur", 409));
       }
     }
 
@@ -246,6 +256,7 @@ export const updateCategory = catchAsyncErrors(async (req, res, next) => {
       data: {
         titleEN: data.titleEN,
         titleAZ: data.titleAZ,
+        position: Number(data.position) ? Number(data.position) : undefined,
       },
     });
 
@@ -258,6 +269,18 @@ export const updateCategory = catchAsyncErrors(async (req, res, next) => {
         message: error.message,
         categoryId: req.params.id,
       });
+
+      if (
+        error.code === "P2002" &&
+        (error.meta.target[0] === "titleEN" ||
+          error.meta.target[0] === "titleAZ")
+      ) {
+        return next(new ErrorHandler("Bu başlıq artıq mövcuddur", 409));
+      }
+
+      if (error.code === "P2002" && error.meta.target[0] === "position") {
+        return next(new ErrorHandler("Bu pozisiya artıq doludur", 409));
+      }
 
       // P2025 xətası - Record Not Found
       if (error.code === "P2025") {
