@@ -128,13 +128,7 @@ const productDocs = {
           "multipart/form-data": {
             schema: {
               type: "object",
-              required: [
-                "titleEN",
-                "titleAZ",
-                "price",
-                "position",
-                "subCategoryId",
-              ],
+              required: ["titleEN", "titleAZ", "price", "subCategoryId"],
               properties: {
                 titleEN: {
                   type: "string",

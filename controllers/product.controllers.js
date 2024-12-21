@@ -154,7 +154,6 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
       titleEN: formData.titleEN,
       titleAZ: formData.titleAZ,
       price: formData.price,
-      position: formData.position && Number(formData.position),
       subCategoryId: formData.subCategoryId && Number(formData.subCategoryId),
     });
 
@@ -176,7 +175,9 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
         isCombo: formData.isCombo === "true",
         ingridientsAZ: formData.ingridientsAZ,
         ingridientsEN: formData.ingridientsEN,
-        position: Number(formData.position),
+        position: Number(formData.position)
+          ? Number(formData.position)
+          : undefined,
         subCategoryId: Number(formData.subCategoryId),
       },
     });

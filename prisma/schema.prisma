@@ -52,7 +52,7 @@ model Product {
   image    String?
   subCategory  SubCategory @relation(fields: [subCategoryId], references: [id], onDelete: Cascade)
   subCategoryId Int
-  position Int
+  position Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
