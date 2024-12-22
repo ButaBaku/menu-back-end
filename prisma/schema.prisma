@@ -21,7 +21,7 @@ model Category {
   titleAZ      String @unique
   image     String
   subCategories SubCategory[]
-  position Int @unique
+  position Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -33,7 +33,7 @@ model SubCategory {
   category  Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId Int
   products Product[]
-  position Int @unique
+  position Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
