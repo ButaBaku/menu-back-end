@@ -162,6 +162,20 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler(error.errors[0].message, 400));
     }
 
+    if (Number(formData.position)) {
+      const existingProduct = await prisma.product.findFirst({
+        where: {
+          position: Number(formData.position),
+          subCategoryId: Number(formData.subCategoryId),
+        },
+      });
+
+      if (existingProduct) {
+        logger.warn("Bu pozisiyada məhsul mövcuddur");
+        return next(new ErrorHandler("Bu pozisiyada məhsul mövcuddur", 409));
+      }
+    }
+
     // Yeni məhsul yaradılır
     const product = await prisma.product.create({
       data: {
@@ -235,9 +249,6 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
   try {
     const data = req.body;
 
-    console.log(Boolean(data.isCombo));
-    console.log(typeof Boolean(data.isCombo));
-
     const productId = parseInt(req.params.id);
 
     if (isNaN(productId)) {
@@ -247,8 +258,54 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Məhsul ID-si düzgün formatda deyil", 400));
     }
 
+    const product = await prisma.product.findUnique({
+      where: {
+        id: productId,
+      },
+    });
+
+    if (!product) {
+      logger.warn("Məhsul tapılmadı");
+      return next(new ErrorHandler("Məhsul tapılmadı", 404));
+    }
+
+    if (Number(data.position)) {
+      const existingProduct = await prisma.product.findFirst({
+        where: {
+          position: Number(data.position),
+          subCategoryId: Number(data.subCategoryId)
+            ? Number(data.subCategoryId)
+            : product.subCategoryId,
+        },
+      });
+
+      if (existingProduct) {
+        logger.warn("Bu pozisiyada məhsul mövcuddur");
+        return next(new ErrorHandler("Bu pozisiyada məhsul mövcuddur", 409));
+      }
+    }
+
+    if (!Number(data.position) && Number(data.subCategoryId)) {
+      const existingProduct = await prisma.product.findFirst({
+        where: {
+          position: product.position,
+          subCategoryId: Number(data.subCategoryId),
+        },
+      });
+
+      if (existingProduct) {
+        logger.warn("Bu alt kateqoriyada eyni pozisiyada məhsul mövcuddur");
+        return next(
+          new ErrorHandler(
+            "Bu alt kateqoriyada eyni pozisiyada məhsul mövcuddur",
+            409
+          )
+        );
+      }
+    }
+
     // Məhsulun yenilənməsi
-    const product = await prisma.product.update({
+    const updatedProduct = await prisma.product.update({
       where: {
         id: productId,
       },
@@ -270,7 +327,7 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
     });
 
     logger.info("Məhsul uğurla yeniləndi", { productId: req.params.id });
-    res.status(200).send(product);
+    res.status(200).send(updatedProduct);
   } catch (error) {
     // Prisma xətası
     if (error instanceof PrismaClientKnownRequestError) {

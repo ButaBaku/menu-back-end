@@ -163,6 +163,23 @@ export const createSubcategory = catchAsyncErrors(async (req, res, next) => {
   }
 
   try {
+    const existingSubcategory = await prisma.subCategory.findFirst({
+      where: {
+        position,
+        categoryId,
+      },
+    });
+
+    if (existingSubcategory) {
+      logger.warn("Bu pozisiyada alt kateqoriya mövcuddur", {
+        position,
+        categoryId,
+      });
+      return next(
+        new ErrorHandler("Bu pozisiyada alt kateqoriya mövcuddur", 409)
+      );
+    }
+
     const subcategory = await prisma.subCategory.create({
       data: {
         titleEN,
@@ -185,18 +202,10 @@ export const createSubcategory = catchAsyncErrors(async (req, res, next) => {
       });
 
       // Prisma Error: P2002 - Unique constraint failed
-      if (
-        error.code === "P2002" &&
-        (error.meta.target[0] === "titleEN" ||
-          error.meta.target[0] === "titleAZ")
-      ) {
+      if (error.code === "P2002") {
         return next(
           new ErrorHandler("Bu başlıqla artıq alt kateqoriya mövcuddur", 409)
         );
-      }
-
-      if (error.code === "P2002" && error.meta.target[0] === "position") {
-        return next(new ErrorHandler("Bu pozisiya artıq doludur", 409));
       }
 
       // Handle other Prisma errors
@@ -245,8 +254,59 @@ export const updateSubcategory = catchAsyncErrors(async (req, res, next) => {
       );
     }
 
+    const subcategory = await prisma.subCategory.findUnique({
+      where: {
+        id: subcategoryId,
+      },
+    });
+
+    if (!subcategory) {
+      logger.warn("Alt kateqoriya tapılmadı");
+      return next(new ErrorHandler("Alt kateqoriya tapılmadı", 404));
+    }
+
+    if (position) {
+      const existingSubcategory = await prisma.subCategory.findFirst({
+        where: {
+          position: Number(position),
+          categoryId: Number(categoryId)
+            ? Number(categoryId)
+            : subcategory.categoryId,
+        },
+      });
+
+      if (existingSubcategory) {
+        logger.warn("Bu pozisiyada alt kateqoriya mövcuddur", {
+          position,
+          categoryId,
+        });
+        return next(
+          new ErrorHandler("Bu pozisiyada alt kateqoriya mövcuddur", 409)
+        );
+      }
+    }
+
+    if (!position && categoryId) {
+      const existingSubcategory = await prisma.subCategory.findFirst({
+        where: {
+          position: subcategory.position,
+          categoryId: Number(categoryId),
+        },
+      });
+
+      if (existingSubcategory) {
+        logger.warn("Bu kateqoriyada eyni pozisiyada alt kateqoriya mövcuddur");
+        return next(
+          new ErrorHandler(
+            "Bu kateqoriyada eyni pozisiyada alt kateqoriya mövcuddur",
+            409
+          )
+        );
+      }
+    }
+
     // Alt kateqoriyanın yenilənməsi
-    const subcategory = await prisma.subCategory.update({
+    const updatedSubcategory = await prisma.subCategory.update({
       where: {
         id: subcategoryId,
       },
@@ -261,7 +321,7 @@ export const updateSubcategory = catchAsyncErrors(async (req, res, next) => {
     logger.info("Alt kateqoriya uğurla yeniləndi", {
       subcategoryId: req.params.id,
     });
-    res.status(200).send(subcategory);
+    res.status(200).send(updatedSubcategory);
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       logger.error("Prisma xətası baş verdi", {
@@ -270,18 +330,10 @@ export const updateSubcategory = catchAsyncErrors(async (req, res, next) => {
         subcategoryId: req.params.id,
       });
 
-      if (
-        error.code === "P2002" &&
-        (error.meta.target[0] === "titleEN" ||
-          error.meta.target[0] === "titleAZ")
-      ) {
+      if (error.code === "P2002") {
         return next(
           new ErrorHandler("Bu başlıqla artıq alt kateqoriya mövcuddur", 409)
         );
-      }
-
-      if (error.code === "P2002" && error.meta.target[0] === "position") {
-        return next(new ErrorHandler("Bu pozisiya artıq doludur", 409));
       }
 
       // P2025 xətası - Record Not Found
