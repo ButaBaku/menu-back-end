@@ -147,7 +147,7 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
     // Məlumatların alınması və fayl yolunun yaradılması
     const formData = req.body;
 
-    const imagePath = `http://${req.headers.host}/${req.file?.filename}`;
+    const imagePath = `${req.headers.origin}/${req.file.filename}`;
 
     // Validasiyanın yoxlanılması
     const { error } = productSchema.safeParse({
