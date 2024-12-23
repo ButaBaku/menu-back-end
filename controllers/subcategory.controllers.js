@@ -275,7 +275,7 @@ export const updateSubcategory = catchAsyncErrors(async (req, res, next) => {
         },
       });
 
-      if (existingSubcategory) {
+      if (existingSubcategory && existingSubcategory.id !== subcategoryId) {
         logger.warn("Bu pozisiyada alt kateqoriya mövcuddur", {
           position,
           categoryId,
@@ -294,7 +294,7 @@ export const updateSubcategory = catchAsyncErrors(async (req, res, next) => {
         },
       });
 
-      if (existingSubcategory) {
+      if (existingSubcategory && existingSubcategory.id !== subcategoryId) {
         logger.warn("Bu kateqoriyada eyni pozisiyada alt kateqoriya mövcuddur");
         return next(
           new ErrorHandler(

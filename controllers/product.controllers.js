@@ -147,7 +147,7 @@ export const createProduct = catchAsyncErrors(async (req, res, next) => {
     // Məlumatların alınması və fayl yolunun yaradılması
     const formData = req.body;
 
-    const imagePath = `${req.headers.origin}/${req.file.filename}`;
+    const imagePath = `${req.headers.origin}/${req.file?.filename}`;
 
     // Validasiyanın yoxlanılması
     const { error } = productSchema.safeParse({
@@ -279,7 +279,7 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
         },
       });
 
-      if (existingProduct) {
+      if (existingProduct && existingProduct.id !== productId) {
         logger.warn("Bu pozisiyada məhsul mövcuddur");
         return next(new ErrorHandler("Bu pozisiyada məhsul mövcuddur", 409));
       }
@@ -293,7 +293,7 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
         },
       });
 
-      if (existingProduct) {
+      if (existingProduct && existingProduct.id !== productId) {
         logger.warn("Bu alt kateqoriyada eyni pozisiyada məhsul mövcuddur");
         return next(
           new ErrorHandler(

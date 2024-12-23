@@ -161,7 +161,7 @@ export const createCategory = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Şəkil tələb olunur", 400));
     }
 
-    const imagePath = `${req.headers.origin}/${req.file.filename}`;
+    const imagePath = `${req.headers.origin}/${req.file?.filename}`;
 
     // Validasiyanın yoxlanılması
     const { error } = categorySchema.safeParse({

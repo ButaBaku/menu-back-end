@@ -128,7 +128,7 @@ export const createCampaign = catchAsyncErrors(async (req, res, next) => {
 
   try {
     const formData = req.body;
-    const imagePath = `${req.headers.origin}/${req.file.filename}`;
+    const imagePath = `${req.headers.origin}/${req.file?.filename}`;
 
     // İstifadəçi məlumatlarının doğrulanması (validation)
     const { error } = campaignSchema.safeParse({
